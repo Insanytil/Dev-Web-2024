@@ -1,0 +1,43 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server local eat API server.
+  title: local eat API
+  version: "1.0"
+paths:
+  /api/ping:
+    get:
+      description: Check API status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Check API status
+      tags:
+      - Ping
+  /api/technologies:
+    get:
+      description: Get all technologies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Get all technologies
+      tags:
+      - Technologies
+produces:
+- application/json
+schemes:
+- http
+swagger: "2.0"

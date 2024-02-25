@@ -3,8 +3,12 @@ package web
 import (
 	"encoding/json"
 	"log"
-	"net/http"
 	"my-app/db"
+	"net/http"
+
+	_ "my-app/docs"
+
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
 type App struct {
@@ -18,10 +22,13 @@ func NewApp(d db.DB, cors bool) App {
 		handlers: make(map[string]http.HandlerFunc),
 	}
 	techHandler := app.GetTechnologies
+	pingHandler := app.GetPing
 	if !cors {
 		techHandler = disableCors(techHandler)
 	}
 	app.handlers["/api/technologies"] = techHandler
+	app.handlers["/api/ping"] = pingHandler
+	app.handlers["/swagger/*"] = httpSwagger.Handler(httpSwagger.URL("http://localhost:8080/swagger/doc.json")) // The url pointing to API definition
 	app.handlers["/"] = http.FileServer(http.Dir("/webapp")).ServeHTTP
 	return app
 }
@@ -34,7 +41,36 @@ func (a *App) Serve() error {
 	return http.ListenAndServe(":8080", nil)
 }
 
+// swagger:operation GET /api/technologies Technologies GetTechnologiesRequest
+// GET Technologies
+// @Summary Get all technologies
+// @Description Get all technologies
+// @Tags Technologies
+// @Produce json
+// @Success 200 {array} string
+// @Router /api/technologies [get]
 func (a *App) GetTechnologies(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	technologies, err := a.d.GetTechnologies()
+	if err != nil {
+		sendErr(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	err = json.NewEncoder(w).Encode(technologies)
+	if err != nil {
+		sendErr(w, http.StatusInternalServerError, err.Error())
+	}
+}
+
+// swagger:operation GET /api/ping Ping GetPingRequest
+// GET Ping
+// @Summary Check API status
+// @Description Check API status
+// @Tags Ping
+// @Produce json
+// @Success 200 {array} string
+// @Router /api/ping [get]
+func (a *App) GetPing(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	technologies, err := a.d.GetTechnologies()
 	if err != nil {

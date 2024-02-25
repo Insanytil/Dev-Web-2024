@@ -4,10 +4,18 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
-	"os"
 	"my-app/db"
 	"my-app/web"
+	"os"
 )
+
+// @title local eat API
+// @version 1.0
+// @description This is a sample server local eat API server.
+// @host localhost:8080
+// @BasePath /
+// @schemes http
+// @produce json
 
 func main() {
 	d, err := sql.Open("mysql", dataSource())
