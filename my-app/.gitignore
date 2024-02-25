@@ -6,6 +6,7 @@
 *.test
 *.out
 
-webapp/node_modules
-webapp/build
-webapp/npm-debug.log*
+/webapp/node_modules
+/webapp/node_modules/*
+/webapp/build
+/webapp/npm-debug.log*
