@@ -16,18 +16,16 @@ import (
 // @BasePath /
 // @schemes http
 // @produce json
-
 func main() {
-	d, err := sql.Open("mysql", dataSource())
+	mysql, err := sql.Open("mysql", dataSource())
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer d.Close()
+	defer mysql.Close()
 	// CORS is enabled only in prod profile
 	cors := os.Getenv("profile") == "prod"
-	app := web.NewApp(db.NewDB(d), cors)
-	err = app.Serve()
-	log.Println("Error", err)
+	app := web.NewApp(db.NewDB(mysql), cors)
+	log.Println("Error", app)
 }
 
 func dataSource() string {

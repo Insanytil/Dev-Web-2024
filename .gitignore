@@ -43,6 +43,7 @@ my-app/webapp/yarn-error.log
 .history/*
 
 # Miscellaneous
+my-app/webapp/.angular
 my-app/webapp/.angular/cache
 my-app/webapp/.angular/*
 .sass-cache/

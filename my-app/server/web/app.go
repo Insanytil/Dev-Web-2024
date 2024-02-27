@@ -1,44 +1,40 @@
 package web
 
 import (
-	"encoding/json"
 	"log"
 	"my-app/db"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
+
 	_ "my-app/docs"
 
-	httpSwagger "github.com/swaggo/http-swagger/v2"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 type App struct {
-	d        db.DB
-	handlers map[string]http.HandlerFunc
+	d db.DB
 }
 
-func NewApp(d db.DB, cors bool) App {
-	app := App{
-		d:        d,
-		handlers: make(map[string]http.HandlerFunc),
-	}
+func NewApp(d db.DB, corsBool bool) error {
+	router := gin.Default()
+	app := App{d: d}
 	techHandler := app.GetTechnologies
 	pingHandler := app.GetPing
-	if !cors {
-		techHandler = disableCors(techHandler)
+	if !corsBool {
+		router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
+		AllowHeaders:     []string{"*"},
+	}))
 	}
-	app.handlers["/api/technologies"] = techHandler
-	app.handlers["/api/ping"] = pingHandler
-	app.handlers["/swagger/*"] = httpSwagger.Handler(httpSwagger.URL("http://localhost:8080/swagger/doc.json")) // The url pointing to API definition
-	app.handlers["/"] = http.FileServer(http.Dir("/webapp")).ServeHTTP
-	return app
-}
-
-func (a *App) Serve() error {
-	for path, handler := range a.handlers {
-		http.Handle(path, handler)
-	}
+	router.GET("/api/technologies", techHandler)
+	router.GET("/api/ping", pingHandler)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // The url pointing to API definition
 	log.Println("Web server is available on port 8080")
-	return http.ListenAndServe(":8080", nil)
+	return router.Run(":8080")
 }
 
 // swagger:operation GET /api/technologies Technologies GetTechnologiesRequest
@@ -49,17 +45,12 @@ func (a *App) Serve() error {
 // @Produce json
 // @Success 200 {array} string
 // @Router /api/technologies [get]
-func (a *App) GetTechnologies(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	technologies, err := a.d.GetTechnologies()
+func (app *App) GetTechnologies(context *gin.Context) {
+	technologies, err := app.d.GetTechnologies()
 	if err != nil {
-		sendErr(w, http.StatusInternalServerError, err.Error())
-		return
+		context.JSON(http.StatusInternalServerError, err.Error())
 	}
-	err = json.NewEncoder(w).Encode(technologies)
-	if err != nil {
-		sendErr(w, http.StatusInternalServerError, err.Error())
-	}
+	context.JSON(http.StatusOK, technologies)
 }
 
 // swagger:operation GET /api/ping Ping GetPingRequest
@@ -70,30 +61,10 @@ func (a *App) GetTechnologies(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Success 200 {array} string
 // @Router /api/ping [get]
-func (a *App) GetPing(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	technologies, err := a.d.GetTechnologies()
+func (app *App) GetPing(context *gin.Context) {
+	technologies, err := app.d.GetTechnologies()
 	if err != nil {
-		sendErr(w, http.StatusInternalServerError, err.Error())
-		return
+		context.JSON(http.StatusInternalServerError, err.Error())
 	}
-	err = json.NewEncoder(w).Encode(technologies)
-	if err != nil {
-		sendErr(w, http.StatusInternalServerError, err.Error())
-	}
-}
-
-func sendErr(w http.ResponseWriter, code int, message string) {
-	resp, _ := json.Marshal(map[string]string{"error": message})
-	http.Error(w, string(resp), code)
-}
-
-// Needed in order to disable CORS for local development
-func disableCors(h http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "*")
-		w.Header().Set("Access-Control-Allow-Headers", "*")
-		h(w, r)
-	}
+	context.JSON(http.StatusOK, technologies)
 }
