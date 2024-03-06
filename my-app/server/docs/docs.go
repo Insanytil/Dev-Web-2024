@@ -40,29 +40,6 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/api/technologies": {
-            "get": {
-                "description": "Get all technologies",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Technologies"
-                ],
-                "summary": "Get all technologies",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }`

@@ -2,11 +2,12 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
 	"log"
-	"my-app/db"
-	"my-app/web"
+	"local_eat/api/db"
+	"local_eat/api/web"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // @title local eat API
@@ -35,5 +36,5 @@ func dataSource() string {
 		host = "db"
 		pass = os.Getenv("db_pass")
 	}
-	return "goxygen:" + pass + "@tcp(" + host + ":3306)/goxygen"
+	return "goxygen:" + pass + "@tcp(" + host + ":3906)/goxygen"
 }

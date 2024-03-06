@@ -21,21 +21,6 @@ paths:
       summary: Check API status
       tags:
       - Ping
-  /api/technologies:
-    get:
-      description: Get all technologies
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              type: string
-            type: array
-      summary: Get all technologies
-      tags:
-      - Technologies
 produces:
 - application/json
 schemes:

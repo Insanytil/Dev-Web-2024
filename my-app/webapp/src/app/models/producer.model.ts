@@ -1,4 +1,4 @@
-export class Producer {
+export interface Producer {
     id: number;
     name: string;
     picture: string;

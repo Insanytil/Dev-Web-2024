@@ -1,4 +1,4 @@
-import { Producer } from "./producer";
+import { Producer } from "./models/producer.model";
 
 export const PRODUCERS: Producer[] = [
     {

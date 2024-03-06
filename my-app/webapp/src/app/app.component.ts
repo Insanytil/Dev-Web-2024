@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PRODUCERS} from "./mock-producer-list";
-import {Producer} from "./producer";
+import { PRODUCERS } from "./mock-producer-list";
+import { Producer } from "./models/producer.model";
 
 @Component({
   selector: 'app-root',

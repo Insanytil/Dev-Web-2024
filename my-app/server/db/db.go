@@ -2,7 +2,7 @@ package db
 
 import (
 	"database/sql"
-	"my-app/model"
+	"local_eat/api/model"
 )
 
 type DB interface {
