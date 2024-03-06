@@ -7,6 +7,7 @@ import (
 
 type DB interface {
 	GetTechnologies() ([]*model.Technology, error)
+	GetProducers() ([]*model.Producers, error)
 }
 
 type MySQLDB struct {
@@ -33,4 +34,22 @@ func (db MySQLDB) GetTechnologies() ([]*model.Technology, error) {
 		techs = append(techs, tech)
 	}
 	return techs, nil
+}
+
+func (db MySQLDB) GetProducers() ([]*model.Producers, error) {
+	rows, err := db.mysql.Query("select * from producers")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var prods []*model.Producers
+	for rows.Next() {
+		prod := new(model.Producers)
+		err = rows.Scan(&prod.Id, &prod.Name, &prod.Picture, &prod.Created)
+		if err != nil {
+			return nil, err
+		}
+		prods = append(prods, prod)
+	}
+	return prods, nil
 }

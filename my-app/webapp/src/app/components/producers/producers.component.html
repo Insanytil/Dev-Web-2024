@@ -1,0 +1,22 @@
+<div class="app">
+    <h2 class="title">{{title}}</h2>
+    <h5>Producteurs :</h5>
+    <div class= "container">
+        <div class="row">
+            <div *ngFor="let producer of producerList" class="col m4 s6">
+                <div class="card horizontal">
+                    <div class="card-image">
+                        <img [src]="producer.picture"/>
+                    </div>
+                    <div class="card-stacked">
+                        <div class = "card-content">
+                            <p>{{producer.name}}</p>
+                            <p><small>Création du compte: {{producer.created.getDate()}}/{{producer.created.getMonth()+1}}/{{producer.created.getFullYear()}}</small></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

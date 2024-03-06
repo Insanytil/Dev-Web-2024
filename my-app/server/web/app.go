@@ -28,6 +28,7 @@ func NewApp(d db.DB, corsBool bool) error {
 	}))
 	}
 	router.GET("/api/ping", app.GetPing)
+	router.GET("/api/producers", app.GetProducers)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // The url pointing to API definition
 	log.Println("Web server is available on port 8080")
 	return router.Run(":8080")
@@ -43,6 +44,23 @@ func NewApp(d db.DB, corsBool bool) error {
 // @Router /api/ping [get]
 func (app *App) GetPing(context *gin.Context) {
 	technologies, err := app.db.GetTechnologies()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	context.JSON(http.StatusOK, technologies)
+}
+
+// swagger:operation GET /api/producers Producers GetProducersRequest
+// GET Producers
+// @Summary Get producers
+// @Description Get producers id, name, picture and created values
+// @Tags Producers
+// @Produce json
+// @Success 200 {array} string
+// @Router /api/producers [get]
+func (app *App) GetProducers(context *gin.Context) {
+	technologies, err := app.db.GetProducers()
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, err.Error())
 		return

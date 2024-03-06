@@ -21,6 +21,21 @@ paths:
       summary: Check API status
       tags:
       - Ping
+  /api/producers:
+    get:
+      description: Get producers id, name, picture and created values
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Get producers
+      tags:
+      - Producers
 produces:
 - application/json
 schemes:

@@ -40,6 +40,29 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/producers": {
+            "get": {
+                "description": "Get producers id, name, picture and created values",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Producers"
+                ],
+                "summary": "Get producers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }`
