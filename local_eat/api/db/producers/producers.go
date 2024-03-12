@@ -1,24 +1,12 @@
-package db
+package producers
 
 import (
 	"database/sql"
 	"local_eat/api/model"
 )
 
-type DB interface {
-	GetProducers() ([]*model.Producers, error)
-}
-
-type MySQLDB struct {
-	mysql *sql.DB
-}
-
-func NewDB(db *sql.DB) DB {
-	return MySQLDB{mysql: db}
-}
-
-func (db MySQLDB) GetProducers() ([]*model.Producers, error) {
-	rows, err := db.mysql.Query("select * from producers")
+func GetProducers(db *sql.DB) ([]*model.Producers, error) {
+	rows, err := db.Query("select * from producers")
 	if err != nil {
 		return nil, err
 	}

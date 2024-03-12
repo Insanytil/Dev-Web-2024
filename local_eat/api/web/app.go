@@ -1,19 +1,20 @@
 package web
 
 import (
-	"log"
-	"local_eat/api/db"
-	"local_eat/api/routes/users"
+	"database/sql"
 	_ "local_eat/api/docs"
-	
-	"github.com/gin-gonic/gin"
+	"local_eat/api/routes/users"
+	"local_eat/api/routes/auth"
+	"log"
+
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
-func NewApp(db db.DB, corsBool bool) error {
+func NewApp(db *sql.DB, corsBool bool) error {
 	router := gin.Default()
 	if !corsBool {
 		router.Use(cors.New(cors.Config{
@@ -23,6 +24,7 @@ func NewApp(db db.DB, corsBool bool) error {
 	}))
 	}
 	users.Routes(router, db)
+	auth.Routes(router, db)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // The url pointing to API definition
 	log.Println("Web server is available on port 8080")
 	return router.Run(":8080")

@@ -52,7 +52,7 @@ local_eat/web/.angular/*
 /libpeerconnection.log
 testem.log
 /typings
-*/.env
+*.env
 
 # System files
 .DS_Store

@@ -1,11 +1,11 @@
 package middleware
 
 import (
+	"database/sql"
 	"github.com/gin-gonic/gin"
-	"local_eat/api/db"
 )
 
-func DBMiddleware(db db.DB) gin.HandlerFunc {
+func DBMiddleware(db *sql.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		context.Set("db", db)
 		context.Next()

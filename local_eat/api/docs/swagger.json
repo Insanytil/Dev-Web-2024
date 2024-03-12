@@ -15,6 +15,43 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
+        "/api/auth/signup": {
+            "post": {
+                "description": "Send user data to create a new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send user data to create a new user",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Users"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/producers": {
             "get": {
                 "description": "Get producers id, name, picture and created values",
@@ -64,6 +101,43 @@
                 "picture": {
                     "type": "string",
                     "example": "John.jpg"
+                }
+            }
+        },
+        "model.Users": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "1234 Main St"
+                },
+                "age": {
+                    "type": "integer",
+                    "example": 20
+                },
+                "cellphone": {
+                    "type": "string",
+                    "example": "1234567890"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "John@example.com"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "M"
+                },
+                "locality": {
+                    "type": "integer",
+                    "example": 1650
+                },
+                "password": {
+                    "type": "string",
+                    "example": "1234"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "John"
                 }
             }
         }
