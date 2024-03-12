@@ -6,9 +6,9 @@
 *.test
 *.out
 
-my-app/webapp/build
-my-app/webapp/npm-debug.log*
-my-app/webapp/node_modules/.package-lock.json
+local_eat/web/build
+local_eat/web/npm-debug.log*
+local_eat/web/node_modules/.package-lock.json
 
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
@@ -21,9 +21,9 @@ my-app/webapp/node_modules/.package-lock.json
 /build
 
 # Node
-my-app/webapp/node_modules
-my-app/webapp/npm-debug.log
-my-app/webapp/yarn-error.log
+local_eat/web/node_modules
+local_eat/web/npm-debug.log
+local_eat/web/yarn-error.log
 
 # IDEs and editors
 .idea/
@@ -43,15 +43,16 @@ my-app/webapp/yarn-error.log
 .history/*
 
 # Miscellaneous
-my-app/webapp/.angular
-my-app/webapp/.angular/cache
-my-app/webapp/.angular/*
+local_eat/web/.angular
+local_eat/web/.angular/cache
+local_eat/web/.angular/*
 .sass-cache/
 /connect.lock
 /coverage
 /libpeerconnection.log
 testem.log
 /typings
+*/.env
 
 # System files
 .DS_Store
