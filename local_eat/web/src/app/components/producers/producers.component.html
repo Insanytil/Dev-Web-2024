@@ -1,9 +1,45 @@
 <div class="app">
-    <h2 class="title">{{title}}</h2>
-    <h5>Producteurs :</h5>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo"><img src="./assets/logo.png"></a>
+
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <nav>
+                        <div class="nav-wrapper">
+                            <form>
+                                <div class="input-field">
+                                    <input id="search" type="search" required>
+                                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                                    <i class="material-icons">close</i>
+                                </div>
+                            </form>
+                        </div>
+                    </nav>
+                </li>
+
+                <li><a href="connexion.html">Connexion</a></li>
+                <li><a href="inscription.html">Inscription</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s3"></li>
+                <li class="tab col s2"><a href="#producers">Producteurs</a></li>
+                <li class="tab col s2"><a href="#products">Produits</a></li>
+                <li class="tab col s2"><a href="#recipes">Recettes</a></li>
+                <li class="tab col s2"><a href="#news">Actualités</a></li>
+            </ul>
+        </div>
+    </div>
+
     <div class= "container">
         <div class="row">
-            <div *ngFor="let producer of producerList" class="col m4 s6">
+            <h5>Producteurs :</h5>
+            <div *ngFor="let producer of producerList" class="col s6">
                 <div class="card horizontal">
                     <div class="card-image">
                         <img [src]="producer.picture"/>
@@ -15,7 +51,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
