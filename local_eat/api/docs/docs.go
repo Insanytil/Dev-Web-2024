@@ -18,29 +18,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/ping": {
-            "get": {
-                "description": "Check API status",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ping"
-                ],
-                "summary": "Check API status",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/producers": {
             "get": {
                 "description": "Get producers id, name, picture and created values",
@@ -57,10 +34,39 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "string"
+                                "$ref": "#/definitions/model.Producers"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Producers": {
+            "type": "object",
+            "properties": {
+                "created": {
+                    "type": "string",
+                    "example": "2020-01-01"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "picture": {
+                    "type": "string",
+                    "example": "John.jpg"
                 }
             }
         }

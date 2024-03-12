@@ -1,4 +1,20 @@
 basePath: /
+definitions:
+  model.Producers:
+    properties:
+      created:
+        example: "2020-01-01"
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: John
+        type: string
+      picture:
+        example: John.jpg
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -6,21 +22,6 @@ info:
   title: local eat API
   version: "1.0"
 paths:
-  /api/ping:
-    get:
-      description: Check API status
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              type: string
-            type: array
-      summary: Check API status
-      tags:
-      - Ping
   /api/producers:
     get:
       description: Get producers id, name, picture and created values
@@ -31,8 +32,12 @@ paths:
           description: OK
           schema:
             items:
-              type: string
+              $ref: '#/definitions/model.Producers'
             type: array
+        "500":
+          description: Internal server error
+          schema:
+            type: string
       summary: Get producers
       tags:
       - Producers
