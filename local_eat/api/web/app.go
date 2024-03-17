@@ -26,6 +26,7 @@ func NewApp(db *sql.DB, corsBool bool) {
 		Addr:    ":8080",
 		Handler: router,
 	}
+	log.Println(corsBool)
 	if !corsBool {
 		router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},

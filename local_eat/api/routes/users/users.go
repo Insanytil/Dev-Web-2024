@@ -13,7 +13,7 @@ func Routes(route *gin.Engine, db *sql.DB) {
 	users := route.Group("/api/producers")
 	{
 		users.Use(middleware.DBMiddleware(db))
-		users.GET("/", GetProducers)
+		users.GET("", GetProducers)
 	}
 }
 
