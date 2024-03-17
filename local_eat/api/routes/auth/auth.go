@@ -21,6 +21,7 @@ func Routes(route *gin.Engine, db *sql.DB) {
 		users.Use(middleware.DBMiddleware(db))
 		users.POST("/signup", signup)
 		users.POST("/login", login)
+		users.GET("/authenticate", middleware.AuthMiddleware(db), Authenticate)
 	}
 }
 
@@ -109,4 +110,20 @@ func login(context *gin.Context) {
 	context.SetSameSite(http.SameSiteLaxMode)
 	context.SetCookie("token", tokenString, 3600 * 24, "", "", false, true)
 	context.JSON(http.StatusOK, gin.H{})
+}
+
+// swagger:operation GET /api/auth/authenticate Auth GetAuthenticateRequest
+// GET Authenticate
+// @Summary Validate user token
+// @Description Validate user token
+// @Tags Auth
+// @Produce json
+// @Success 200 {string} string "User authenticated"
+// @Failure 401 {string} string "Unauthorized"
+// @Router /api/auth/authenticate [get]
+func Authenticate(context *gin.Context) {
+	user, _ := context.Get("user")
+	context.JSON(http.StatusOK, gin.H{
+		"user": user.(model.UsersLogin).Username,
+	})
 }

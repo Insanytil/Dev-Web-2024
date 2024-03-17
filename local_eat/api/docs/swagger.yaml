@@ -61,6 +61,25 @@ info:
   title: local eat API
   version: "1.0"
 paths:
+  /api/auth/authenticate:
+    get:
+      consumes:
+      - application/json
+      description: Validate user token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User authenticated
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Validate user token
+      tags:
+      - Auth
   /api/auth/login:
     post:
       consumes:
