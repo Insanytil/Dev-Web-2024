@@ -15,7 +15,19 @@ definitions:
         example: John.jpg
         type: string
     type: object
-  model.Users:
+  model.UsersLogin:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      password:
+        example: "1234"
+        type: string
+      username:
+        example: John
+        type: string
+    type: object
+  model.UsersSignup:
     properties:
       address:
         example: 1234 Main St
@@ -27,7 +39,7 @@ definitions:
         example: "1234567890"
         type: string
       email:
-        example: John@example.com
+        example: john@example.com
         type: string
       gender:
         example: M
@@ -49,6 +61,34 @@ info:
   title: local eat API
   version: "1.0"
 paths:
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Send username and password to login to receive a token in a cookie
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UsersLogin'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid password
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Send username and password to login
+      tags:
+      - Auth
   /api/auth/signup:
     post:
       consumes:
@@ -60,10 +100,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/model.Users'
+          $ref: '#/definitions/model.UsersSignup'
       responses:
         "200":
           description: OK
+          schema:
+            type: string
+        "400":
+          description: Failed to create user
           schema:
             type: string
         "500":

@@ -18,6 +18,49 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/auth/login": {
+            "post": {
+                "description": "Send username and password to login to receive a token in a cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send username and password to login",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UsersLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid password",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/auth/signup": {
             "post": {
                 "description": "Send user data to create a new user",
@@ -35,13 +78,19 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Users"
+                            "$ref": "#/definitions/model.UsersSignup"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed to create user",
                         "schema": {
                             "type": "string"
                         }
@@ -107,7 +156,24 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Users": {
+        "model.UsersLogin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "1234"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "John"
+                }
+            }
+        },
+        "model.UsersSignup": {
             "type": "object",
             "properties": {
                 "address": {
@@ -124,7 +190,7 @@ const docTemplate = `{
                 },
                 "email": {
                     "type": "string",
-                    "example": "John@example.com"
+                    "example": "john@example.com"
                 },
                 "gender": {
                     "type": "string",

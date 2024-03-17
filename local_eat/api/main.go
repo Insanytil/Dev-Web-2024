@@ -25,8 +25,7 @@ func main() {
 	defer mysql.Close()
 	// CORS is enabled only in prod profile
 	cors := os.Getenv("profile") == "prod"
-	appErr := web.NewApp(mysql, cors)
-	log.Println("Error", appErr)
+	web.NewApp(mysql, cors)
 }
 
 func dataSource() string {
