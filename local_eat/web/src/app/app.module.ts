@@ -7,6 +7,7 @@ import { ProducersComponent } from './components/producers/producers.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { NavComponent } from './components/nav/nav.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -24,6 +25,7 @@ const routes: Routes = [
     NotFoundComponent,
     LoginComponent,
     SignupComponent,
+    NavComponent,
   ],
   imports: [
     BrowserModule,
