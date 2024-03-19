@@ -10,6 +10,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { NavComponent} from "./components/nav/nav.component";
 import { CatchphraseComponent } from './components/catchphrase/catchphrase.component';
 
+
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'},
   { path: 'home', component: NavComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
     LoginComponent,
     SignupComponent,
     CatchphraseComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
