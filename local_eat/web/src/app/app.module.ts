@@ -7,9 +7,14 @@ import { ProducersComponent } from './components/producers/producers.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { NavComponent} from "./components/nav/nav.component";
+import { CatchphraseComponent } from './components/catchphrase/catchphrase.component';
+
 
 const routes: Routes = [
-  { path: '', redirectTo: 'producers', pathMatch: 'full'},
+  { path: '', redirectTo: 'home', pathMatch: 'full'},
+  { path: 'home', component: NavComponent },
+  { path: 'catchphrase', component: CatchphraseComponent},
   { path: 'producers', component: ProducersComponent },
   { path: 'login', component: LoginComponent},
   { path: 'signup', component: SignupComponent},
@@ -23,6 +28,8 @@ const routes: Routes = [
     NotFoundComponent,
     LoginComponent,
     SignupComponent,
+    CatchphraseComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
