@@ -1,18 +1,18 @@
 package auth
 
 import (
-	"database/sql"
 	"net/http"
 	"os"
 	"time"
 
-	"local_eat/api/db/auth"
+	"local_eat/api/initializers"
 	"local_eat/api/middleware"
 	"local_eat/api/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 func Routes(route *gin.Engine) {
@@ -30,33 +30,35 @@ func Routes(route *gin.Engine) {
 // @Description Send user data to create a new user
 // @Tags Auth
 // @Accept json
-// @Param user body model.UsersSignup true "User data"
-// @Success 200 {string} string ""
-// @Failure 400 {string} string "Invalid request"
-// @Failure 400 {string} string "Failed to create user"
-// @Failure 500 {string} string "Internal server error"
+// @Param user body model.Users true "User data"
+// @Success 200 "User created"
+// @Failure 400 "Invalid request"
+// @Failure 500 "Internal server error"
 // @Router /api/auth/signup [post]
 func signup(context *gin.Context) {
-	db := context.MustGet("db").(*sql.DB)
-	var user model.UsersSignup
-	if context.BindJSON(&user) != nil {
+	var body model.Users
+	if context.BindJSON(&body) != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request"})
 		return
 	}
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Internal server error"})
 		return
 	}
 
-	user.Password = string(hash)
-	err = auth.CreateUser(db, &user)
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to create user"})
+	user := model.Users{
+		Username: body.Username,
+		Password: string(hash),
+		Email:    body.Email,
+	}
+	result := initializers.DB.Create(&user)
+	if result.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Internal server error"})
 		return
 	}
 	context.JSON(http.StatusOK, gin.H{})
@@ -68,29 +70,35 @@ func signup(context *gin.Context) {
 // @Description Send username and password to login to receive a token in a cookie
 // @Tags Auth
 // @Accept json
-// @Param user body model.UsersLogin true "User data"
-// @Success 200 {string} string ""
-// @Failure 400 {string} string "User not found"
-// @Failure 400 {string} string "Invalid password"
-// @Failure 500 {string} string "Internal server error"
+// @Param user body model.Users true "User data"
+// @Success 200 "User authenticated"
+// @Failure 400 "User not found"
+// @Failure 400 "Invalid password"
+// @Failure 500 "Internal server error"
 // @Router /api/auth/login [post]
 func login(context *gin.Context) {
-	db := context.MustGet("db").(*sql.DB)
-	var user model.UsersLogin
-	if context.BindJSON(&user) != nil {
+	var body model.Users
+	if context.BindJSON(&body) != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request"})
 		return
 	}
 
-	userDB, err := auth.GetUser(db, user.Username)
-	if err != nil {
+	var user model.Users
+	var result *gorm.DB
+	if body.Username == nil {
+		result = initializers.DB.First(&user, "email = ?", body.Email)
+	} else {
+		result = initializers.DB.First(&user, "username = ?", body.Username)
+	}
+
+	if result.Error != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"error": "User not found"})
+			"error": "Invalid username or email"})
 		return
 	}
 
-	if bcrypt.CompareHashAndPassword([]byte(userDB.Password), []byte(user.Password)) != nil {
+	if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)) != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid password"})
 		return
@@ -117,12 +125,12 @@ func login(context *gin.Context) {
 // @Description Validate user token
 // @Tags Auth
 // @Produce json
-// @Success 200 {string} string "User authenticated"
-// @Failure 401 {string} string "Unauthorized"
+// @Success 200 "User authenticated"
+// @Failure 401 "Unauthorized"
 // @Router /api/auth/authenticate [get]
 func Authenticate(context *gin.Context) {
 	user, _ := context.Get("user")
 	context.JSON(http.StatusOK, gin.H{
-		"user": user.(model.UsersLogin).Username,
+		"user": user.(model.Users).Username,
 	})
 }

@@ -36,5 +36,5 @@ func LoadEnv() {
 }
 
 func SyncDB() {
-	DB.AutoMigrate(&model.Producers{})
+	DB.AutoMigrate(&model.Users{})
 }

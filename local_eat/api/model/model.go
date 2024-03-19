@@ -1,7 +1,6 @@
 package model
 
-import (
-)
+import ()
 
 type Producers struct {
 	Id      int    `json:"id" example:"1" gorm:"primaryKey; autoIncrement"`
@@ -10,19 +9,8 @@ type Producers struct {
 	Created string `json:"created" example:"2020-01-01"`
 }
 
-type UsersSignup struct {
-	Username  string `json:"username" example:"John"`
-	Password  string `json:"password" example:"1234"`
-	Email     string `json:"email" example:"john@example.com"`
-	Age       int    `json:"age" example:"20"`
-	Gender    string `json:"gender" example:"M"`
-	Address   string `json:"address" example:"1234 Main St"`
-	Locality  int    `json:"locality" example:"1650"`
-	Cellphone string `json:"cellphone" example:"1234567890"`
-}
-
-type UsersLogin struct {
-	Username string `json:"username" example:"John"`
-	Password string `json:"password" example:"1234"`
-	Email    string `json:"email" example:"john@example.com"`
+type Users struct {
+	Username *string `json:"username,omitempty" example:"John" gorm:"primaryKey"`
+	Password string  `json:"password" example:"1234"`
+	Email    *string `json:"email,omitempty" example:"john@example.com"`
 }

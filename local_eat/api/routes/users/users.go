@@ -23,10 +23,20 @@ func Routes(route *gin.Engine) {
 // @Tags Producers
 // @Produce json
 // @Success 200 {array} model.Producers
-// @Failure 500 {string} string "Internal server error"
+// @Failure 404 "Not found"
+// @Failure 500 "Internal server error"
 // @Router /api/producers [get]
 func GetProducers(context *gin.Context) {
 	var producers []*model.Producers
-	initializers.DB.Find(&producers)
+	result := initializers.DB.Find(&producers)
+	if result.RowsAffected == 0 {
+		context.JSON(http.StatusNotFound, gin.H{})
+		return
+	
+	}
+	if result.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{})
+		return
+	}
 	context.JSON(http.StatusOK, producers)
 }

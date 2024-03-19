@@ -21,9 +21,6 @@ const docTemplate = `{
         "/api/auth/authenticate": {
             "get": {
                 "description": "Validate user token",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -33,16 +30,10 @@ const docTemplate = `{
                 "summary": "Validate user token",
                 "responses": {
                     "200": {
-                        "description": "User authenticated",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "User authenticated"
                     },
                     "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Unauthorized"
                     }
                 }
             }
@@ -64,28 +55,19 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UsersLogin"
+                            "$ref": "#/definitions/model.Users"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "User authenticated"
                     },
                     "400": {
-                        "description": "Invalid password",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Invalid password"
                     },
                     "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -107,28 +89,19 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UsersSignup"
+                            "$ref": "#/definitions/model.Users"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "User created"
                     },
                     "400": {
-                        "description": "Failed to create user",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Invalid request"
                     },
                     "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -153,11 +126,11 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "404": {
+                        "description": "Not found"
+                    },
                     "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -185,49 +158,12 @@ const docTemplate = `{
                 }
             }
         },
-        "model.UsersLogin": {
+        "model.Users": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string",
                     "example": "john@example.com"
-                },
-                "password": {
-                    "type": "string",
-                    "example": "1234"
-                },
-                "username": {
-                    "type": "string",
-                    "example": "John"
-                }
-            }
-        },
-        "model.UsersSignup": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "example": "1234 Main St"
-                },
-                "age": {
-                    "type": "integer",
-                    "example": 20
-                },
-                "cellphone": {
-                    "type": "string",
-                    "example": "1234567890"
-                },
-                "email": {
-                    "type": "string",
-                    "example": "john@example.com"
-                },
-                "gender": {
-                    "type": "string",
-                    "example": "M"
-                },
-                "locality": {
-                    "type": "integer",
-                    "example": 1650
                 },
                 "password": {
                     "type": "string",

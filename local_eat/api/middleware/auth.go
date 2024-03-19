@@ -2,11 +2,11 @@ package middleware
 
 import (
 	"fmt"
+	"local_eat/api/initializers"
+	"local_eat/api/model"
 	"net/http"
 	"os"
 	"time"
-
-	"local_eat/api/db/auth"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -32,14 +32,13 @@ func AuthMiddleware(context *gin.Context) {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			context.AbortWithStatus(http.StatusUnauthorized)
 		}
-		user, err := auth.GetUser(claims["username"].(string))
-		if err != nil {
+		var user model.Users
+		result := initializers.DB.First(&user, "username = ?", claims["username"])
+		if result.Error != nil || user.Username == nil{
 			context.AbortWithStatus(http.StatusUnauthorized)
 		}
-		if user.Username == claims["username"] {
-			context.Set("user", user)
-			context.Next()
-		}
+		context.Set("user", user)
+		context.Next()
 	} else {
 		context.AbortWithStatus(http.StatusUnauthorized)
 	}
