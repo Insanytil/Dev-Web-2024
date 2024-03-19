@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ProducersComponent } from './components/producers/producers.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { NavComponent } from './components/nav/nav.component';
 
 const routes: Routes = [
   { path: '', component: ProducersComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
     AppComponent,
     ProducersComponent,
     NotFoundComponent,
+    NavComponent,
   ],
   imports: [
     BrowserModule,
