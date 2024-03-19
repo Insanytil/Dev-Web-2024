@@ -7,11 +7,7 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class ProducersService {
-  private url = `${environment.apiUrl}/producers`
+export class AuthService {
+  private url = `${environment.apiUrl}/auth`
   constructor(private http:HttpClient) { }
-
-  getProducers(): Observable<Producer[]>{
-    return this.http.get<Producer[]>(this.url);
-  }
 }

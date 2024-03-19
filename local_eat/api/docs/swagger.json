@@ -15,24 +15,116 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/api/ping": {
+        "/api/auth/authenticate": {
             "get": {
-                "description": "Check API status",
+                "description": "Validate user token",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Ping"
+                    "Auth"
                 ],
-                "summary": "Check API status",
+                "summary": "Validate user token",
+                "responses": {
+                    "200": {
+                        "description": "User authenticated",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "description": "Send username and password to login to receive a token in a cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send username and password to login",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UsersLogin"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid password",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/signup": {
+            "post": {
+                "description": "Send user data to create a new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send user data to create a new user",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UsersSignup"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed to create user",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -54,10 +146,93 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "string"
+                                "$ref": "#/definitions/model.Producers"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Producers": {
+            "type": "object",
+            "properties": {
+                "created": {
+                    "type": "string",
+                    "example": "2020-01-01"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "picture": {
+                    "type": "string",
+                    "example": "John.jpg"
+                }
+            }
+        },
+        "model.UsersLogin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "1234"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "John"
+                }
+            }
+        },
+        "model.UsersSignup": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "1234 Main St"
+                },
+                "age": {
+                    "type": "integer",
+                    "example": 20
+                },
+                "cellphone": {
+                    "type": "string",
+                    "example": "1234567890"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "M"
+                },
+                "locality": {
+                    "type": "integer",
+                    "example": 1650
+                },
+                "password": {
+                    "type": "string",
+                    "example": "1234"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "John"
                 }
             }
         }

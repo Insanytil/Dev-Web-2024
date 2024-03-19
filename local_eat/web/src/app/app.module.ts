@@ -5,11 +5,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ProducersComponent } from './components/producers/producers.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { LoginComponent } from './components/login/login.component';
+import { SignupComponent } from './components/signup/signup.component';
 import { NavComponent } from './components/nav/nav.component';
 
 const routes: Routes = [
-  { path: '', component: ProducersComponent },
-  { path: '**', component: NotFoundComponent}
+  { path: '', redirectTo: 'producers', pathMatch: 'full'},
+  { path: 'producers', component: ProducersComponent },
+  { path: 'login', component: LoginComponent},
+  { path: 'signup', component: SignupComponent},
+  { path: '**', component: NotFoundComponent},
 ];
 
 @NgModule({
@@ -17,6 +22,8 @@ const routes: Routes = [
     AppComponent,
     ProducersComponent,
     NotFoundComponent,
+    LoginComponent,
+    SignupComponent,
     NavComponent,
   ],
   imports: [

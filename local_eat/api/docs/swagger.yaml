@@ -1,4 +1,59 @@
 basePath: /
+definitions:
+  model.Producers:
+    properties:
+      created:
+        example: "2020-01-01"
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: John
+        type: string
+      picture:
+        example: John.jpg
+        type: string
+    type: object
+  model.UsersLogin:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      password:
+        example: "1234"
+        type: string
+      username:
+        example: John
+        type: string
+    type: object
+  model.UsersSignup:
+    properties:
+      address:
+        example: 1234 Main St
+        type: string
+      age:
+        example: 20
+        type: integer
+      cellphone:
+        example: "1234567890"
+        type: string
+      email:
+        example: john@example.com
+        type: string
+      gender:
+        example: M
+        type: string
+      locality:
+        example: 1650
+        type: integer
+      password:
+        example: "1234"
+        type: string
+      username:
+        example: John
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -6,21 +61,81 @@ info:
   title: local eat API
   version: "1.0"
 paths:
-  /api/ping:
+  /api/auth/authenticate:
     get:
-      description: Check API status
+      consumes:
+      - application/json
+      description: Validate user token
       produces:
       - application/json
       responses:
         "200":
+          description: User authenticated
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Validate user token
+      tags:
+      - Auth
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Send username and password to login to receive a token in a cookie
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UsersLogin'
+      responses:
+        "200":
           description: OK
           schema:
-            items:
-              type: string
-            type: array
-      summary: Check API status
+            type: string
+        "400":
+          description: Invalid password
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Send username and password to login
       tags:
-      - Ping
+      - Auth
+  /api/auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Send user data to create a new user
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UsersSignup'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Failed to create user
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Send user data to create a new user
+      tags:
+      - Auth
   /api/producers:
     get:
       description: Get producers id, name, picture and created values
@@ -31,8 +146,12 @@ paths:
           description: OK
           schema:
             items:
-              type: string
+              $ref: '#/definitions/model.Producers'
             type: array
+        "500":
+          description: Internal server error
+          schema:
+            type: string
       summary: Get producers
       tags:
       - Producers

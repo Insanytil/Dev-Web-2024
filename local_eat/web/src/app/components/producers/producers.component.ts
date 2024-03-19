@@ -1,21 +1,25 @@
 import { Component } from '@angular/core';
+import { takeUntil } from 'rxjs';
 import { Producer } from 'src/app/models/producer.model';
 import { ProducersService } from 'src/app/services/producers.service';
+import { Unsub } from 'src/app/utils/unsub';
 
 @Component({
   selector: 'app-producers',
   templateUrl: './producers.component.html',
   styleUrls: ['./producers.component.scss']
 })
-export class ProducersComponent {
-  constructor(private producersService: ProducersService) {}
+export class ProducersComponent extends Unsub{
+  constructor(private producersService: ProducersService) {
+    super();
+  }
 
   title = 'LocalEat';
   producerList : Producer[] = [];
   producerSelected : Producer|undefined;
 
   ngOnInit(){
-    this.producersService.getProducers().subscribe((producers) => {
+    this.producersService.getProducers().pipe(takeUntil(this.unsubscribe$)).subscribe((producers) => {
         this.producerList = producers;
         this.producerList.forEach(producer => {
             producer.created = new Date(producer.created);
