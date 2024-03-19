@@ -15,13 +15,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Routes(route *gin.Engine, db *sql.DB) {
+func Routes(route *gin.Engine) {
 	users := route.Group("/api/auth")
 	{
-		users.Use(middleware.DBMiddleware(db))
 		users.POST("/signup", signup)
 		users.POST("/login", login)
-		users.GET("/authenticate", middleware.AuthMiddleware(db), Authenticate)
+		users.GET("/authenticate", middleware.AuthMiddleware, Authenticate)
 	}
 }
 

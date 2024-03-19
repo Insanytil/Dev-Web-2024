@@ -1,18 +1,17 @@
 package users
 
 import (
-	"database/sql"
-	dbPack "local_eat/api/db/producers"
-	"local_eat/api/middleware"
 	"net/http"
+
+	"local_eat/api/initializers"
+	"local_eat/api/model"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Routes(route *gin.Engine, db *sql.DB) {
+func Routes(route *gin.Engine) {
 	users := route.Group("/api/producers")
 	{
-		users.Use(middleware.DBMiddleware(db))
 		users.GET("", GetProducers)
 	}
 }
@@ -27,11 +26,7 @@ func Routes(route *gin.Engine, db *sql.DB) {
 // @Failure 500 {string} string "Internal server error"
 // @Router /api/producers [get]
 func GetProducers(context *gin.Context) {
-	db := context.MustGet("db").(*sql.DB)
-	producers, err := dbPack.GetProducers(db)
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, "Internal server error")
-		return
-	}
+	var producers []*model.Producers
+	initializers.DB.Find(&producers)
 	context.JSON(http.StatusOK, producers)
 }
