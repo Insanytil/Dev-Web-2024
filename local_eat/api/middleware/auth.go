@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"local_eat/api/initializers"
-	"local_eat/api/model"
+	model "local_eat/api/models"
 	"net/http"
 	"os"
 	"time"
@@ -34,7 +34,7 @@ func AuthMiddleware(context *gin.Context) {
 		}
 		var user model.Users
 		result := initializers.DB.First(&user, "username = ?", claims["username"])
-		if result.Error != nil || user.Username == nil{
+		if result.Error != nil || user.Username == nil {
 			context.AbortWithStatus(http.StatusUnauthorized)
 		}
 		context.Set("user", user)

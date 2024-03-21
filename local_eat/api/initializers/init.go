@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"local_eat/api/model"
+	model "local_eat/api/models"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"

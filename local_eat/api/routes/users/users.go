@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"local_eat/api/initializers"
-	"local_eat/api/model"
+	model "local_eat/api/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,7 +32,7 @@ func GetProducers(context *gin.Context) {
 	if result.RowsAffected == 0 {
 		context.JSON(http.StatusNotFound, gin.H{})
 		return
-	
+
 	}
 	if result.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{})

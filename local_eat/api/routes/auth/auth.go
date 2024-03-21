@@ -7,7 +7,7 @@ import (
 
 	"local_eat/api/initializers"
 	"local_eat/api/middleware"
-	"local_eat/api/model"
+	model "local_eat/api/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -106,7 +106,7 @@ func login(context *gin.Context) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": user.Username,
-		"exp": time.Now().Add(time.Hour * 24).Unix(),
+		"exp":      time.Now().Add(time.Hour * 24).Unix(),
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_KEY")))
 	if err != nil {
@@ -115,7 +115,7 @@ func login(context *gin.Context) {
 		return
 	}
 	context.SetSameSite(http.SameSiteLaxMode)
-	context.SetCookie("token", tokenString, 3600 * 24, "", "", false, true)
+	context.SetCookie("token", tokenString, 3600*24, "", "", false, true)
 	context.JSON(http.StatusOK, gin.H{})
 }
 
