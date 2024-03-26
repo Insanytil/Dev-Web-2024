@@ -2,11 +2,12 @@ package middleware
 
 import (
 	"fmt"
-	"local_eat/api/initializers"
-	model "local_eat/api/models"
 	"net/http"
 	"os"
 	"time"
+	
+	"local_eat/api/initializers"
+	model "local_eat/api/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"

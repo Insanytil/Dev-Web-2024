@@ -20,7 +20,7 @@ func Routes(route *gin.Engine) {
 	{
 		users.POST("/signup", signup)
 		users.POST("/login", login)
-		users.GET("/authenticate", middleware.AuthMiddleware, Authenticate)
+		users.GET("/authenticate", middleware.AuthMiddleware, authenticate)
 	}
 }
 
@@ -30,7 +30,7 @@ func Routes(route *gin.Engine) {
 // @Description Send user data to create a new user
 // @Tags Auth
 // @Accept json
-// @Param user body model.Users true "User data"
+// @Param user body models.Users true "User data"
 // @Success 200 "User created"
 // @Failure 400 "Invalid request"
 // @Failure 500 "Internal server error"
@@ -70,7 +70,7 @@ func signup(context *gin.Context) {
 // @Description Send username and password to login to receive a token in a cookie
 // @Tags Auth
 // @Accept json
-// @Param user body model.Users true "User data"
+// @Param user body models.Users true "User data"
 // @Success 200 "User authenticated"
 // @Failure 400 "User not found"
 // @Failure 400 "Invalid password"
@@ -128,7 +128,7 @@ func login(context *gin.Context) {
 // @Success 200 "User authenticated"
 // @Failure 401 "Unauthorized"
 // @Router /api/auth/authenticate [get]
-func Authenticate(context *gin.Context) {
+func authenticate(context *gin.Context) {
 	user, _ := context.Get("user")
 	context.JSON(http.StatusOK, gin.H{
 		"user": user.(model.Users).Username,
