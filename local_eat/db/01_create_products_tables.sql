@@ -4,7 +4,8 @@ create table categories(
     mother_cat char(5) null, -- A category can be a subcategory of another one
     description longtext null,
     primary key (id),
-    foreign key (mother_cat) references categories(id)
+    foreign key (mother_cat) references categories(id),
+    unique (name)
 );
 
 create table products(
@@ -13,7 +14,8 @@ create table products(
     cat char(4) not null,
     description longtext null,
     primary key (id),
-    foreign key (cat) references categories(id)
+    foreign key (cat) references categories(id),
+    unique (name)
 );
 
 create table catalog_details(

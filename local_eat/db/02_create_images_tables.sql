@@ -1,9 +1,9 @@
 create table images(
 	id char(7) not null,
-    name varchar(30) not null,
     path varchar(100) not null,
     description longtext null,
-    primary key (id)
+    primary key (id),
+    unique (path)
 );
 
 create table photo_albums(
