@@ -2,7 +2,8 @@ create table users(
     username varchar(20) not null,
     password varchar(64) not null, -- SHA-256 produit un hash de 64 caractères hexadécimaux
     email varchar(50) not null,
-    primary key (username));
+    primary key (username)
+);
 
 create table addresses(
     id char(5) not null,
@@ -12,7 +13,8 @@ create table addresses(
     postcode int not null,
     locality varchar(20) not null,
     country varchar(20) not null,
-    primary key (id));
+    primary key (id)
+);
 
 create table producers(
     id char(7) not null,
@@ -23,7 +25,8 @@ create table producers(
     phone_num char(10) not null,
     primary key (id),
     foreign key (username) references users(username),
-    foreign key (address) references addresses(id));
+    foreign key (address) references addresses(id)
+);
 
 create table companies(
     company_name varchar(20) not null,
@@ -35,11 +38,13 @@ create table companies(
     vat_num char(12) not null,
     description longtext null,
     primary key (company_name),
-    foreign key (address) references addresses(id));
+    foreign key (address) references addresses(id)
+);
 
 create table rel_comp_prods(
     producer_id char(7) not null,
     company_name varchar(20) not null,
     primary key (producer_id, company_name),
     foreign key (producer_id) references producers(id),
-    foreign key (company_name) references companies(company_name));
+    foreign key (company_name) references companies(company_name)
+);
