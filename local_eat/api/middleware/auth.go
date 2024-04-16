@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 	"time"
-	
+
 	"local_eat/api/initializers"
 	model "local_eat/api/models"
 
@@ -14,6 +14,12 @@ import (
 )
 
 func AuthMiddleware(context *gin.Context) {
+	// Allow cross-origin requests from your frontend
+	context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	context.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+	context.Writer.Header().Set("Access-Control-Allow-Headers", "Origin,Content-Type,Authorization")
+	context.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+
 	tokenString, err := context.Cookie("token")
 	if err != nil {
 		context.AbortWithStatus(http.StatusUnauthorized)

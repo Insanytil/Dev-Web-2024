@@ -1,23 +1,23 @@
 <div class="container">
     <div class="row">
-        <form class="col s8 offset-l2">
+        <form class="col s8 offset-l2" (submit)="signup()">
             <div class="card-panel" style="height: 75vh; margin-top: 100px;" >
                 <div class="row">
-                    <h4 class="center-align" style="margin-bottom: 50px;">S'inscrire</h4>
+                    <h4 class="center-align">S'enregistrer</h4>
                     <div class="input-field col s12" >
-                        <input placeholder="Nom utilisateur*" id="first_name" type="text" class="validate">
+                        <input placeholder="Nom d'utilisateur*" id="first_name" type="text" class="validate" [(ngModel)]="username" name="username" required>
                         <label for="first_name" class="active">*champs obligatoires</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input placeholder="Mot de passe*" id="password" type="password" class="validate">
+                        <input placeholder="Mot de passe*" id="password" type="password" class="validate" [(ngModel)]="password" name="password" required>
                         <label for="password" class="active">*champs obligatoires</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input placeholder="Adresse mail (exemple@mail.com)*" id="email" type="email" class="validate">
+                        <input placeholder="Adresse mail (exemple@mail.com)*" id="email" type="email" class="validate" [(ngModel)]="email" name="email" required>
                         <label for="email" class="active">*champs obligatoires</label>
                     </div>
                 </div>
