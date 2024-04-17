@@ -1,47 +1,35 @@
 import { Component } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
+import { HttpResponse } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
-  errorMessage: string = '';
+  username: string;
+  password: string;
 
-  constructor(private http: HttpClient, private router: Router) { }
-  async login() {
-    const userData = {
-      "username": this.username,
-      "password": this.password,
-    };
+  constructor(private authService: AuthService, private router: Router) { }
 
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+  login() {
+    this.authService.login(this.username, this.password).subscribe(
+      (res: HttpResponse<any>) => {
+        console.log('response from server:', res);
+        console.log('response headers', res.headers.keys());
+        if (res.ok) {
+          const token = res.body.accessToken;
+          localStorage.setItem('token', token);
+          this.router.navigate(['/']);
+        } else {
+          console.error('Error:', res.body.error);
+        }
       },
-      body: JSON.stringify(userData)
-    };
-
-    try {
-      const response = await fetch('http://localhost:8080/api/auth/login', requestOptions);
-      const data = await response.json();
-      if (response.ok) {
-        const token = data.accessToken; 
-        console.log(data);
-        console.log(token);
-        localStorage.setItem('token', token);
-        await this.router.navigate(['/']);
-      } else {
-        console.error('Error:', data.error);
+      error => {
+        console.error('Error:', error);
       }
-    } catch (error) {
-      console.error('Error during request:', error);
-    }
+    );
   }
 }

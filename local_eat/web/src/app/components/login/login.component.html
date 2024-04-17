@@ -1,27 +1,28 @@
 <div class="container">
-    <div class="row">
-      <form class="col s8 offset-l2" (submit)="login()">
-        <div class="card-panel" style="height: 75vh; margin-top: 100px;" >
-          <div class="row">
-            <h4 class="center-align">Se connecter</h4>
-          </div>
-          <div class="row">
-            <div class="input-field col s12" >
-              <input placeholder="Nom d'utilisateur*" id="first_name" type="text" class="validate" [(ngModel)]="username" name="username" required>
-              <label for="first_name" class="active">*champs obligatoires</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s12">
-              <input placeholder="Mot de passe*" id="password" type="password" class="validate" [(ngModel)]="password" name="password" required>
-              <label for="password" class="active">*champs obligatoires</label>
-            </div>
-          </div>
-          <div class="row" class="center-align">
-            <div class="input-field col s12">
-              <button class="btn waves-effect waves-light" type="submit" name="action">S'enregistrer</button>
-            </div>
+  <div class="row">
+    <form class="col s8 offset-l2" (ngSubmit)="login()">
+      <div class="card-panel" style="height: 75vh; margin-top: 100px;" >
+        <div class="row">
+          <h4 class="center-align">Se connecter</h4>
+        </div>
+        <div class="row">
+          <div class="input-field col s12" >
+            <input placeholder="Nom d'utilisateur*" id="first_name" type="text" class="validate" [(ngModel)]="username" name="username" required>
+            <label for="first_name" class="active">*champs obligatoires</label>
           </div>
         </div>
-      </form>
-    </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="Mot de passe*" id="password" type="password" class="validate" [(ngModel)]="password" name="password" required>
+            <label for="password" class="active">*champs obligatoires</label>
+          </div>
+        </div>
+        <div class="row" class="center-align">
+          <div class="input-field col s12">
+            <button class="btn waves-effect waves-light" type="submit" name="action">Se connecter</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

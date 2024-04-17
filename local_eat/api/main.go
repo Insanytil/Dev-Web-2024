@@ -40,11 +40,12 @@ func main() {
 		Addr:    ":8080",
 		Handler: router,
 	}
-	if !(os.Getenv("profile") == "prod") {
+	if os.Getenv("profile") != "prod" {
 		router.Use(cors.New(cors.Config{
-			AllowOrigins: []string{"*"},
-			AllowMethods: []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
-			AllowHeaders: []string{"*"},
+			AllowOrigins:     []string{"http://localhost:3000"}, // Spécifiez votre origine Angular
+			AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
+			AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Cache-Control", "X-Requested-With", "Set-Cookie"},
+			AllowCredentials: true,
 		}))
 	}
 	users.Routes(router)
@@ -66,7 +67,7 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	log.Println("Shutdown Server ...")
-	
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {

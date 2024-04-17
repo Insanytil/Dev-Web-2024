@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router'
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ProducersComponent } from './components/producers/producers.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -10,6 +10,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { NavComponent} from "./components/nav/nav.component";
 import { CatchphraseComponent } from './components/catchphrase/catchphrase.component';
 import { FormsModule } from '@angular/forms';
+import { CustomInterceptor } from './interceptors/custom-interceptor';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -37,7 +38,9 @@ const routes: Routes = [
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: CustomInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
