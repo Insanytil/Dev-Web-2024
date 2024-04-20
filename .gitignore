@@ -1,24 +1,25 @@
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-*.test
-*.out
+**.exe
+**.exe~
+**.dll
+**.so
+**.dylib
+**.test
+**.out
 
 local_eat/web/build
 local_eat/web/npm-debug.log*
 local_eat/web/node_modules/.package-lock.json
-
+**/pnpm-lock.yaml
+**/.docker
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # Compiled output
-*/dist
-*/tmp
-*/out-tsc
-*/bazel-out
-*/build
+**/dist
+**/tmp
+**/out-tsc
+**/bazel-out
+**/build
 local_eat/api/tmp
 
 # Node
@@ -27,13 +28,13 @@ local_eat/web/npm-debug.log
 local_eat/web/yarn-error.log
 
 # IDEs and editors
-*.idea/
-*.project
-*.classpath
-*.c9/
-*.launch
-*.settings/
-*.sublime-workspace
+**.idea/
+**.project
+**.classpath
+**.c9/
+**.launch
+**.settings/
+**.sublime-workspace
 
 # Visual Studio Code
 .vscode/*
@@ -47,15 +48,15 @@ local_eat/web/yarn-error.log
 local_eat/web/.angular
 local_eat/web/.angular/cache
 local_eat/web/.angular/*
-*.sass-cache/
-*/connect.lock
-*/coverage
-*/libpeerconnection.log
-*testem.log
-*/typings
-*.env
-*.air.toml
+**.sass-cache/
+**/connect.lock
+**/coverage
+**/libpeerconnection.log
+**testem.log
+**/typings
+**.env
+**.air.toml
 
 # System files
-*.DS_Store
-*Thumbs.db
+**.DS_Store
+**Thumbs.db
