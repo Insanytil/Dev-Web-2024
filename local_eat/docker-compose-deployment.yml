@@ -1,0 +1,59 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-web
+    image: local_eat/web
+    container_name: web
+    hostname: web
+    ports:
+      - 80:80
+    networks:
+      - api
+    depends_on:
+      - api
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    image: local_eat/api
+    container_name: api
+    hostname: api
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_PORT: 3306
+      DB_HOST: db
+      JWT_KEY: ${JWT_KEY}
+    networks:
+      - api
+      - db
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mysql:8.0.31
+    container_name: db
+    hostname: db
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_RANDOM_ROOT_PASSWORD: "no"
+    networks:
+      - db
+    volumes:
+      - ./db/sql:/docker-entrypoint-initdb.d/
+      - ./db/conf:/etc/mysql/conf.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 0s
+
+networks:
+  api:
+  db:
