@@ -22,8 +22,8 @@ create table producers(
     username varchar(20) not null,
     firstname char(20) not null,
     lastname char(20) not null,
-    address char(5) not null,
     phone_num char(10) not null,
+    email_pro varchar(50) not null,
     primary key (id),
     foreign key (username) references users(username),
     foreign key (address) references addresses(id),
@@ -34,7 +34,7 @@ create table companies(
     company_name varchar(20) not null,
     password varchar(64) not null, -- SHA-256 produit un hash de 64 caractères hexadécimaux
     alias varchar(50) not null,
-    address char(5) not null,
+    address varchar(200) not null,
     mail varchar(50) not null,
     phone_num char(10) not null,
     vat_num char(12) not null,
