@@ -8,10 +8,24 @@ services:
     hostname: web
     ports:
       - 80:80
+      - 443:443
     networks:
       - api
+    volumes:
+      - ./web/build:/usr/share/nginx/html
+      - ./certbot/conf:/etc/letsencrypt/:ro
+      - ./certbot/www:/var/www/certbot/:ro
     depends_on:
       - api
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt/:rw
+      - ./certbot/www:/var/www/certbot/:rw
+    depends_on:
+      - web
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email m.verbiest@students.ephec.be -d localeat.ephec-ti.be --agree-tos
   api:
     build:
       context: .

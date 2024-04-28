@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: ''
+    apiUrl: 'localeat.ephec-ti.be'
 };

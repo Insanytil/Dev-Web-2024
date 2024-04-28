@@ -9,6 +9,7 @@
 local_eat/web/build
 local_eat/web/npm-debug.log*
 local_eat/web/node_modules/.package-lock.json
+local_eat/certbot/
 **/pnpm-lock.yaml
 **/.docker
 
