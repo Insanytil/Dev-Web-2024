@@ -36,5 +36,18 @@ func LoadEnv() {
 }
 
 func SyncDB() {
-	DB.AutoMigrate(&model.Users{})
+	err := DB.AutoMigrate(&model.Producers{}, &model.Users{}, &model.Category{}, &model.Product{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Définir les contraintes de clé étrangère supplémentaires si nécessaire
+	// Par exemple, pour MySQL, vous pouvez utiliser DB.Exec() pour exécuter des requêtes SQL
+	// pour définir les contraintes de clé étrangère.
+	// Voici un exemple de requête SQL pour définir une contrainte de clé étrangère dans MySQL :
+	// _, err = DB.Exec("ALTER TABLE producers ADD CONSTRAINT fk_users FOREIGN KEY (username) REFERENCES users(username) ON UPDATE CASCADE ON DELETE SET NULL;")
+	// if err != nil {
+	//     log.Fatal(err)
+	// }
+
+	// Répétez ce processus pour chaque clé étrangère que vous souhaitez définir.
 }

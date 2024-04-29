@@ -12,12 +12,14 @@ import { CatchphraseComponent } from './components/catchphrase/catchphrase.compo
 import { FormsModule } from '@angular/forms';
 import { CustomInterceptor } from './interceptors/custom-interceptor';
 import { RegisterProducersComponent } from './components/register-producers/register-producers.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ProductsComponent } from './components/products/products.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'},
-  { path: 'home', component: NavComponent },
-  { path: 'catchphrase', component: CatchphraseComponent},
+  { path: 'home', component: DashboardComponent },
   { path: 'producers', component: ProducersComponent },
+  { path: 'products', component: ProductsComponent },
   { path: 'login', component: LoginComponent},
   { path: 'signup', component: SignupComponent},
   { path: 'register-producers', component:RegisterProducersComponent},
@@ -34,7 +36,9 @@ const routes: Routes = [
     SignupComponent,
     CatchphraseComponent,
     NavComponent,
-    RegisterProducersComponent
+    RegisterProducersComponent,
+    DashboardComponent,
+    ProductsComponent
   ],
   imports: [
     BrowserModule,

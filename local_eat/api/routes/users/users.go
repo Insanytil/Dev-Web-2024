@@ -63,24 +63,8 @@ func RegisterProducers(context *gin.Context) {
 		return
 	}
 
-	userInterface, exists := context.Get("user")
-	if !exists {
-		context.JSON(http.StatusUnauthorized, gin.H{
-			"error": "User not found in context",
-		})
-		return
-	}
-	existingUser, ok := userInterface.(model.Users)
-	if !ok {
-		context.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to convert user from context",
-		})
-		return
-	}
-
 	// Créez une nouvelle instance de Producers avec les données envoyées depuis le frontend
 	producers := model.Producers{
-		Users:     existingUser,
 		Firstname: body.Firstname,
 		Lastname:  body.Lastname,
 		PhoneNum:  body.PhoneNum,
