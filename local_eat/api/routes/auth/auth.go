@@ -20,7 +20,7 @@ func Routes(route *gin.Engine) {
 	{
 		users.POST("/signup", signup)
 		users.POST("/login", login)
-		users.GET("/authenticate", middleware.AuthMiddleware, authenticate)
+		users.GET("/authenticate", authenticate, middleware.AuthMiddleware)
 	}
 }
 
@@ -129,8 +129,19 @@ func login(context *gin.Context) {
 // @Failure 401 "Unauthorized"
 // @Router /api/auth/authenticate [get]
 func authenticate(context *gin.Context) {
-	user, _ := context.Get("user")
+	userInterface, exists := context.Get("user")
+	if !exists {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	user, ok := userInterface.(model.Users)
+	if !ok {
+		// Gérer le cas où l'utilisateur n'est pas du type attendu
+		return
+	}
+
 	context.JSON(http.StatusOK, gin.H{
-		"user": user.(model.Users).Username,
+		"user": user.Username,
 	})
 }

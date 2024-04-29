@@ -16,8 +16,14 @@
                     </div>
                 </nav>
             </li>
-            <li><a href="login">Connexion</a></li>
-            <li><a href="signup">Inscription</a></li>
+            <li *ngIf="isAuthenticated">
+                <a href="#">
+                  <img src="/local_eat/web/src/assets/profil_unkown.jpg" alt="Image de profil" style="width: 30px; height: 30px; border-radius: 50%;">
+                </a>
+              </li>
+              <li *ngIf="!isAuthenticated"><a routerLink="/login">Connexion</a></li>
+              <li *ngIf="!isAuthenticated"><a routerLink="/signup">Inscription</a></li>
+            
         </ul>
     </div>
 </nav>

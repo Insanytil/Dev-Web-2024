@@ -11,6 +11,7 @@ export class AuthService {
   private url = `${environment.apiUrl}/auth`
   LOGIN_USER_URL = '/login';
   SIGNIN_USER_URL = '/signup';
+  AUTHENTICATE_URL = '/authenticate'
   constructor(private http:HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
@@ -49,10 +50,18 @@ export class AuthService {
         catchError(this.handleError)
       );
   }
+  authenticate(): Observable<any> {
+    return this.http.get<any>(this.url + this.AUTHENTICATE_URL, {})
+      .pipe(
+        catchError(this.handleError)
+      );
+  };
+
   private handleError(error: any): Observable<never> {
     console.error('Error during request:', error);
     return new Observable<never>((observer) => {
       observer.error(error);
     });
   }
+  
 }
