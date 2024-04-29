@@ -11,6 +11,7 @@ import { NavComponent} from "./components/nav/nav.component";
 import { CatchphraseComponent } from './components/catchphrase/catchphrase.component';
 import { FormsModule } from '@angular/forms';
 import { CustomInterceptor } from './interceptors/custom-interceptor';
+import { RegisterProducersComponent } from './components/register-producers/register-producers.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -19,7 +20,9 @@ const routes: Routes = [
   { path: 'producers', component: ProducersComponent },
   { path: 'login', component: LoginComponent},
   { path: 'signup', component: SignupComponent},
+  { path: 'register-producers', component:RegisterProducersComponent},
   { path: '**', component: NotFoundComponent},
+  
 ];
 
 @NgModule({
@@ -30,7 +33,8 @@ const routes: Routes = [
     LoginComponent,
     SignupComponent,
     CatchphraseComponent,
-    NavComponent
+    NavComponent,
+    RegisterProducersComponent
   ],
   imports: [
     BrowserModule,

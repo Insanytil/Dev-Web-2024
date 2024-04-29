@@ -20,8 +20,6 @@ export class LoginComponent {
         console.log('response from server:', res);
         console.log('response headers', res.headers.keys());
         if (res.ok) {
-          const token = res.body.accessToken;
-          localStorage.setItem('token', token);
           this.router.navigate(['/']);
         } else {
           console.error('Error:', res.body.error);

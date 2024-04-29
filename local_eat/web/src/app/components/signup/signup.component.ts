@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-signup',
@@ -11,33 +12,22 @@ export class SignupComponent {
   username: string = '';
   password: string = '';
   email: string = '';
-  errorMessage: string = '';
-  constructor(private http: HttpClient, private router: Router) { }
-  async signup() {
-    const userData = {
-      "email": this.email,
-      "password": this.password,
-      "username": this.username
-    };
+  constructor(private authService: AuthService, private router: Router) { }
 
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+  signup() {
+    this.authService.signup(this.email, this.password, this.username).subscribe(
+      (res: HttpResponse<any>) => {
+        console.log('response from server:', res);
+        console.log('response headers', res.headers.keys());
+        if (res.ok) {
+          this.router.navigate(['/login']);
+        } else {
+          console.error('Error:', res.body.error);
+        }
       },
-      body: JSON.stringify(userData)
-    };
-
-    try {
-      const response = await fetch('http://localhost:8080/api/auth/signup', requestOptions);
-      const data = await response.json();
-      if (response) {
-        await this.router.navigate(['/login']);
+      error => {
+        console.error('Error:', error);
       }
-    } catch (error) {
-      console.error('Error during request:', error);
-    }
+    );
   }
-
 }

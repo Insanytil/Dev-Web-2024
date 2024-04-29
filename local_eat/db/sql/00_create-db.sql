@@ -26,7 +26,6 @@ create table producers(
     email_pro varchar(50) not null,
     primary key (id),
     foreign key (username) references users(username),
-    foreign key (address) references addresses(id),
     unique (username)
 );
 
