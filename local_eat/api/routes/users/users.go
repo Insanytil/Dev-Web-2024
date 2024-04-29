@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"local_eat/api/initializers"
+	"local_eat/api/middleware"
 	model "local_eat/api/models"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +14,7 @@ func Routes(route *gin.Engine) {
 	users := route.Group("/api/producers")
 	{
 		users.GET("", GetProducers)
-		users.POST("/register", RegisterProducers)
+		users.POST("/register", RegisterProducers, middleware.AuthMiddleware)
 	}
 }
 
@@ -28,7 +29,7 @@ func Routes(route *gin.Engine) {
 // @Failure 500 "Internal server error"
 // @Router /api/producers [get]
 func GetProducers(context *gin.Context) {
-	var producers []*model.Producers
+	var producers []*model.Producer
 	result := initializers.DB.Find(&producers)
 	if result.RowsAffected == 0 {
 		context.JSON(http.StatusNotFound, gin.H{})
@@ -55,31 +56,38 @@ func GetProducers(context *gin.Context) {
 // @Failure 500 "Internal server error"
 // @Router /api/producers/register [post]
 func RegisterProducers(context *gin.Context) {
-	var body model.Producers
+	// Récupérer le nom d'utilisateur du contexte
+	usernameInterface, exists := context.Get("username")
+	if exists {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+	username, ok := usernameInterface.(string)
+	if !ok {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	var body model.Producer
 	if context.BindJSON(&body) != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request",
 		})
 		return
 	}
-
-	// Créez une nouvelle instance de Producers avec les données envoyées depuis le frontend
-	producers := model.Producers{
+	producer := model.Producer{
+		Username:  &username,
 		Firstname: body.Firstname,
 		Lastname:  body.Lastname,
 		PhoneNum:  body.PhoneNum,
 		EmailPro:  body.EmailPro,
 	}
-
-	// Enregistrez le producteur dans la base de données
-	result := initializers.DB.Create(&producers)
+	result := initializers.DB.Create(&producer)
 	if result.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Internal server error",
 		})
 		return
 	}
-
-	// Répondez avec un statut OK si tout s'est bien passé
 	context.JSON(http.StatusOK, gin.H{})
 }

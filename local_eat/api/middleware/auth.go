@@ -24,6 +24,7 @@ func AuthMiddleware(context *gin.Context) {
 	if err != nil {
 		context.AbortWithStatus(http.StatusUnauthorized)
 	}
+	fmt.Println("Token:", tokenString)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -44,7 +45,7 @@ func AuthMiddleware(context *gin.Context) {
 		if result.Error != nil || user.Username == nil {
 			context.AbortWithStatus(http.StatusUnauthorized)
 		}
-		context.Set("user", user)
+		context.Set("username", user.Username)
 		context.Next()
 	} else {
 		context.AbortWithStatus(http.StatusUnauthorized)
