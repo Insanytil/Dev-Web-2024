@@ -2,7 +2,7 @@ basePath: /
 definitions:
   models.Producers:
     properties:
-      email:
+      emailPro:
         example: postmaster@example.com
         type: string
       firstname:
@@ -14,7 +14,7 @@ definitions:
       lastname:
         example: Vleminckx
         type: string
-      phone_num:
+      phoneNum:
         example: "0483598799"
         type: string
       username:
@@ -23,7 +23,7 @@ definitions:
     type: object
   models.Users:
     properties:
-      created:
+      createdAt:
         example: Mon Jan 2 15:04:05 MST 2006
         type: string
       email:
@@ -34,7 +34,7 @@ definitions:
         type: string
       producer:
         $ref: '#/definitions/models.Producers'
-      profile_picture_id:
+      profilePictureId:
         example: "1524689"
         type: string
       username:
@@ -139,8 +139,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Producteur created
         "400":
           description: Bad request
         "500":

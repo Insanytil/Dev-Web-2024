@@ -157,8 +157,8 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
+                    "201": {
+                        "description": "Producteur created"
                     },
                     "400": {
                         "description": "Bad request"
@@ -174,7 +174,7 @@
         "models.Producers": {
             "type": "object",
             "properties": {
-                "email": {
+                "emailPro": {
                     "type": "string",
                     "example": "postmaster@example.com"
                 },
@@ -190,7 +190,7 @@
                     "type": "string",
                     "example": "Vleminckx"
                 },
-                "phone_num": {
+                "phoneNum": {
                     "type": "string",
                     "example": "0483598799"
                 },
@@ -203,7 +203,7 @@
         "models.Users": {
             "type": "object",
             "properties": {
-                "created": {
+                "createdAt": {
                     "type": "string",
                     "example": "Mon Jan 2 15:04:05 MST 2006"
                 },
@@ -218,7 +218,7 @@
                 "producer": {
                     "$ref": "#/definitions/models.Producers"
                 },
-                "profile_picture_id": {
+                "profilePictureId": {
                     "type": "string",
                     "example": "1524689"
                 },

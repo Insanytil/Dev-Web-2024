@@ -4,18 +4,18 @@ import (
 	"net/http"
 
 	"local_eat/api/initializers"
-	model "local_eat/api/models"
-
-	"fmt"
+	"local_eat/api/middleware"
+	"local_eat/api/models"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func Routes(route *gin.Engine) {
 	users := route.Group("/api/producers")
 	{
 		users.GET("", GetProducers)
-		users.POST("/register", RegisterProducers)
+		users.POST("/register", middleware.AuthMiddleware, RegisterProducers)
 	}
 }
 
@@ -30,7 +30,7 @@ func Routes(route *gin.Engine) {
 // @Failure 500 "Internal server error"
 // @Router /api/producers [get]
 func GetProducers(context *gin.Context) {
-	var producers []*model.Producers
+	var producers []*models.Producers
 	result := initializers.DB.Find(&producers)
 	if result.RowsAffected == 0 {
 		context.JSON(http.StatusNotFound, gin.H{})
@@ -52,44 +52,45 @@ func GetProducers(context *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param body body models.Producers true "Producer object to be registered"
-// @Success 200
+// @Success 201 "Producteur created"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
 // @Router /api/producers/register [post]
 func RegisterProducers(context *gin.Context) {
 	// Récupérer le nom d'utilisateur du contexte
-	usernameInterface, exists := context.Get("username")
-	if exists {
-		context.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
-	username, ok := usernameInterface.(string)
-	if !ok {
-		context.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
+	user, _ := context.Get("user")
 
-	var body model.Producers
+	var body models.Producers
 	if context.BindJSON(&body) != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request",
 		})
 		return
 	}
-	producer := model.Producers{
-		Username:  username,
+
+	newProducer := models.Producers{
+		Username:  *user.(models.Users).Username,
 		Firstname: body.Firstname,
 		Lastname:  body.Lastname,
 		PhoneNum:  body.PhoneNum,
 		EmailPro:  body.EmailPro,
 	}
-	fmt.Println(producer)
-	result := initializers.DB.Create(&producer)
+
+	var oldProducer models.Producers
+	exists := initializers.DB.First(&oldProducer, "username = ?", newProducer.Username)
+	if exists.Error != gorm.ErrRecordNotFound {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "User already a producer",
+		})
+		return
+	}
+
+	result := initializers.DB.Create(&newProducer)
 	if result.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Internal server error",
 		})
 		return
 	}
-	context.JSON(http.StatusOK, gin.H{})
+	context.JSON(http.StatusCreated, gin.H{})
 }

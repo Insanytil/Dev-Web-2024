@@ -160,8 +160,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK"
+                    "201": {
+                        "description": "Producteur created"
                     },
                     "400": {
                         "description": "Bad request"
@@ -177,7 +177,7 @@ const docTemplate = `{
         "models.Producers": {
             "type": "object",
             "properties": {
-                "email": {
+                "emailPro": {
                     "type": "string",
                     "example": "postmaster@example.com"
                 },
@@ -193,7 +193,7 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Vleminckx"
                 },
-                "phone_num": {
+                "phoneNum": {
                     "type": "string",
                     "example": "0483598799"
                 },
@@ -206,7 +206,7 @@ const docTemplate = `{
         "models.Users": {
             "type": "object",
             "properties": {
-                "created": {
+                "createdAt": {
                     "type": "string",
                     "example": "Mon Jan 2 15:04:05 MST 2006"
                 },
@@ -221,7 +221,7 @@ const docTemplate = `{
                 "producer": {
                     "$ref": "#/definitions/models.Producers"
                 },
-                "profile_picture_id": {
+                "profilePictureId": {
                     "type": "string",
                     "example": "1524689"
                 },

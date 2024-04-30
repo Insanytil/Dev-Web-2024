@@ -42,7 +42,7 @@ func main() {
 	}
 	if os.Getenv("profile") != "prod" {
 		router.Use(cors.New(cors.Config{
-			AllowOrigins:     []string{"http://localhost:3000"}, // Spécifiez votre origine Angular
+			AllowOrigins:     []string{"http://localhost:3000", "https://localeat.ephec-ti.be"}, // Spécifiez votre origine Angular
 			AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
 			AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Cache-Control", "X-Requested-With", "Set-Cookie"},
 			AllowCredentials: true,

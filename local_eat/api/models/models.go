@@ -5,12 +5,12 @@ import (
 )
 
 type Users struct {
-	Username         *string   `json:"username,omitempty" example:"john_vleminckx" gorm:"primaryKey; varchar(20); unique"`
+	Username         *string    `json:"username,omitempty" example:"john_vleminckx" gorm:"primaryKey; varchar(20); unique"`
 	Producer         *Producers `gorm:"foreignKey:Username; references:Username; constraint:OnDelete:CASCADE;"`
-	Password         string    `json:"password" example:"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"`
-	Email            *string   `json:"email,omitempty" example:"mateo@example.com" gorm:"type:varchar(50)"`
-	CreatedAt        time.Time `json:"createdAt" example:"Mon Jan 2 15:04:05 MST 2006"`
-	ProfilePictureId *string   `json:"profile_picture_id,omitempty" example:"1524689"`
+	Password         string     `json:"password" example:"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"`
+	Email            *string    `json:"email,omitempty" example:"mateo@example.com" gorm:"type:varchar(50)"`
+	CreatedAt        time.Time  `json:"createdAt" example:"Mon Jan 2 15:04:05 MST 2006"`
+	ProfilePictureId *string    `json:"profilePictureId,omitempty" example:"1524689"`
 }
 
 type Producers struct {
@@ -18,8 +18,8 @@ type Producers struct {
 	Username  string `json:"username" example:"john_vleminckx" gorm:"not null; index"`
 	Firstname string `json:"firstname" example:"John" gorm:"type:char(20); not null"`
 	Lastname  string `json:"lastname" example:"Vleminckx" gorm:"type:char(20); not null"`
-	PhoneNum  string `json:"phone_num" example:"0483598799" gorm:"type:char(10); not null"`
-	EmailPro  string `json:"email" example:"postmaster@example.com" gorm:"type:varchar(50); not null"`
+	PhoneNum  string `json:"phoneNum" example:"0483598799" gorm:"type:char(10); not null"`
+	EmailPro  string `json:"emailPro" example:"postmaster@example.com" gorm:"type:varchar(50); not null"`
 }
 
 type Category struct {
