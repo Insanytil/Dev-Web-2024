@@ -4,8 +4,9 @@ import (
 	"net/http"
 
 	"local_eat/api/initializers"
-	"local_eat/api/middleware"
 	model "local_eat/api/models"
+
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +15,7 @@ func Routes(route *gin.Engine) {
 	users := route.Group("/api/producers")
 	{
 		users.GET("", GetProducers)
-		users.POST("/register", RegisterProducers, middleware.AuthMiddleware)
+		users.POST("/register", RegisterProducers)
 	}
 }
 
@@ -82,6 +83,7 @@ func RegisterProducers(context *gin.Context) {
 		PhoneNum:  body.PhoneNum,
 		EmailPro:  body.EmailPro,
 	}
+	fmt.Println(producer)
 	result := initializers.DB.Create(&producer)
 	if result.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{

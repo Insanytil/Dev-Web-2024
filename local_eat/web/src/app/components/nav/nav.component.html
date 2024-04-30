@@ -17,8 +17,8 @@
                 </nav>
             </li>
             <li *ngIf="isAuthenticated">
-                <a href="#">
-                  <img src="/local_eat/web/src/assets/profil_unkown.jpg" alt="Image de profil" style="width: 30px; height: 30px; border-radius: 50%;">
+                <a href="/profil">
+                  <img src="../../../assets/profil_unkown.jpg" alt="Image de profil" style="width:30px; height: 30px; border-radius: 50%;">
                 </a>
               </li>
               <li *ngIf="!isAuthenticated"><a routerLink="/login">Connexion</a></li>

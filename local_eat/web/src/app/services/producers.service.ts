@@ -22,17 +22,17 @@ export class ProducersService {
   registerProducers(Lastname: string, Firstname: string, PhoneNum: string, EmailPro :string): Observable<any> {
     const userData = {
       "Lastname": Lastname,
-      "FIrstname": Firstname,
+      "Firstname":Firstname,
       "PhoneNum": PhoneNum,
-      "EmailPro": EmailPro
+      "EmailPro": EmailPro,
     };
+    
 
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       withCredentials: true,
       observe: 'response' as 'response'
     };
-
     return this.http.post<any>(this.url + this.REGISTER_PRODUCER_URL, userData, httpOptions)
       .pipe(
         catchError(this.handleError)

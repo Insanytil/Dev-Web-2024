@@ -14,6 +14,7 @@ import { CustomInterceptor } from './interceptors/custom-interceptor';
 import { RegisterProducersComponent } from './components/register-producers/register-producers.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProductsComponent } from './components/products/products.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'signup', component: SignupComponent},
   { path: 'register-producers', component:RegisterProducersComponent},
+  { path: 'profil', component:ProfileComponent},
   { path: '**', component: NotFoundComponent},
   
 ];
@@ -38,7 +40,8 @@ const routes: Routes = [
     NavComponent,
     RegisterProducersComponent,
     DashboardComponent,
-    ProductsComponent
+    ProductsComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
