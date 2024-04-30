@@ -1,30 +1,44 @@
 basePath: /
 definitions:
-  model.Producers:
+  models.Producers:
     properties:
-      created:
-        example: "2020-01-01"
+      email:
+        example: postmaster@example.com
+        type: string
+      firstname:
+        example: John
         type: string
       id:
         example: 1
         type: integer
-      name:
-        example: John
+      lastname:
+        example: Vleminckx
         type: string
-      picture:
-        example: John.jpg
-        type: string
-    type: object
-  model.Users:
-    properties:
-      email:
-        example: john@example.com
-        type: string
-      password:
-        example: "1234"
+      phone_num:
+        example: "0483598799"
         type: string
       username:
-        example: John
+        example: john_vleminckx
+        type: string
+    type: object
+  models.Users:
+    properties:
+      created:
+        example: Mon Jan 2 15:04:05 MST 2006
+        type: string
+      email:
+        example: mateo@example.com
+        type: string
+      password:
+        example: ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+        type: string
+      producer:
+        $ref: '#/definitions/models.Producers'
+      profile_picture_id:
+        example: "1524689"
+        type: string
+      username:
+        example: john_vleminckx
         type: string
     type: object
 host: localhost:8080
@@ -58,7 +72,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/model.Users'
+          $ref: '#/definitions/models.Users'
       responses:
         "200":
           description: User authenticated
@@ -80,7 +94,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/model.Users'
+          $ref: '#/definitions/models.Users'
       responses:
         "200":
           description: User created
@@ -101,13 +115,37 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Producers'
+              $ref: '#/definitions/models.Producers'
             type: array
         "404":
           description: Not found
         "500":
           description: Internal server error
       summary: Get producers
+      tags:
+      - Producers
+  /api/producers/register:
+    post:
+      consumes:
+      - application/json
+      description: Post producer Lastname, Firstname, Phone number and pro email
+      parameters:
+      - description: Producer object to be registered
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Producers'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      summary: POST producers
       tags:
       - Producers
 produces:

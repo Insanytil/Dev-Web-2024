@@ -55,7 +55,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Users"
+                            "$ref": "#/definitions/models.Users"
                         }
                     }
                 ],
@@ -89,7 +89,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Users"
+                            "$ref": "#/definitions/models.Users"
                         }
                     }
                 ],
@@ -122,7 +122,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Producers"
+                                "$ref": "#/definitions/models.Producers"
                             }
                         }
                     },
@@ -134,44 +134,100 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/producers/register": {
+            "post": {
+                "description": "Post producer Lastname, Firstname, Phone number and pro email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Producers"
+                ],
+                "summary": "POST producers",
+                "parameters": [
+                    {
+                        "description": "Producer object to be registered",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Producers"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "model.Producers": {
+        "models.Producers": {
             "type": "object",
             "properties": {
-                "created": {
+                "email": {
                     "type": "string",
-                    "example": "2020-01-01"
+                    "example": "postmaster@example.com"
+                },
+                "firstname": {
+                    "type": "string",
+                    "example": "John"
                 },
                 "id": {
                     "type": "integer",
                     "example": 1
                 },
-                "name": {
+                "lastname": {
                     "type": "string",
-                    "example": "John"
+                    "example": "Vleminckx"
                 },
-                "picture": {
+                "phone_num": {
                     "type": "string",
-                    "example": "John.jpg"
-                }
-            }
-        },
-        "model.Users": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "example": "john@example.com"
-                },
-                "password": {
-                    "type": "string",
-                    "example": "1234"
+                    "example": "0483598799"
                 },
                 "username": {
                     "type": "string",
-                    "example": "John"
+                    "example": "john_vleminckx"
+                }
+            }
+        },
+        "models.Users": {
+            "type": "object",
+            "properties": {
+                "created": {
+                    "type": "string",
+                    "example": "Mon Jan 2 15:04:05 MST 2006"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "mateo@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+                },
+                "producer": {
+                    "$ref": "#/definitions/models.Producers"
+                },
+                "profile_picture_id": {
+                    "type": "string",
+                    "example": "1524689"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "john_vleminckx"
                 }
             }
         }

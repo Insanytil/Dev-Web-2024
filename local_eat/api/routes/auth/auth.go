@@ -42,6 +42,11 @@ func signup(context *gin.Context) {
 			"error": "Invalid request"})
 		return
 	}
+	if (body.Password == "") || (body.Username == nil) || (body.Email == nil) {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid request"})
+		return
+	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
 	if err != nil {

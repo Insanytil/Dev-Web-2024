@@ -25,12 +25,12 @@ func Routes(route *gin.Engine) {
 // @Description Get producers id, name, picture and created values
 // @Tags Producers
 // @Produce json
-// @Success 200 {array} model.Producers
+// @Success 200 {array} models.Producers
 // @Failure 404 "Not found"
 // @Failure 500 "Internal server error"
 // @Router /api/producers [get]
 func GetProducers(context *gin.Context) {
-	var producers []*model.Producer
+	var producers []*model.Producers
 	result := initializers.DB.Find(&producers)
 	if result.RowsAffected == 0 {
 		context.JSON(http.StatusNotFound, gin.H{})
@@ -51,7 +51,7 @@ func GetProducers(context *gin.Context) {
 // @Tags Producers
 // @Accept json
 // @Produce json
-// @Param body body model.Producers true "Producer object to be registered"
+// @Param body body models.Producers true "Producer object to be registered"
 // @Success 200
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
@@ -69,14 +69,14 @@ func RegisterProducers(context *gin.Context) {
 		return
 	}
 
-	var body model.Producer
+	var body model.Producers
 	if context.BindJSON(&body) != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request",
 		})
 		return
 	}
-	producer := model.Producer{
+	producer := model.Producers{
 		Username:  username,
 		Firstname: body.Firstname,
 		Lastname:  body.Lastname,
