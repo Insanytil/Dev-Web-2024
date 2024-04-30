@@ -76,7 +76,7 @@ func RegisterProducers(context *gin.Context) {
 		return
 	}
 	producer := model.Producer{
-		Username:  &username,
+		Username:  username,
 		Firstname: body.Firstname,
 		Lastname:  body.Lastname,
 		PhoneNum:  body.PhoneNum,
