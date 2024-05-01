@@ -15,6 +15,7 @@ export class ProfileService {
   GET_COMPANY_URL  = '/get-company'
   GET_PRODUCER_URL = '/get-producer'
   CREATE_COMPANY_URL = '/create-company'
+  QUIT_COMPANY_URL = '/quit-company'
   constructor(private http: HttpClient) { }
 
   getUser(): Observable<User> {
@@ -39,7 +40,6 @@ export class ProfileService {
       "VATNum": VATNum,
       "Description": Description,
     };
-
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       withCredentials: true,
@@ -51,7 +51,21 @@ export class ProfileService {
         catchError(this.handleError)
       );
   }
-  
+  QuitCompany(ProducerId: any): Observable<any>{
+    const userData = {
+      "ProducerId": ProducerId
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      withCredentials: true,
+      observe: 'response' as 'response'
+    };
+    return this.http.post<any>(this.url + this.QUIT_COMPANY_URL, userData, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+
+  }
   private handleError(error: any): Observable<never> {
     console.error('Error during request:', error);
     return new Observable<never>((observer) => {

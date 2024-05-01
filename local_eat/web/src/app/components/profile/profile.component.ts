@@ -83,8 +83,18 @@ export class ProfileComponent implements OnInit {
   joinCompany(){
 
   }
-  onFileSelected(event: any) {
-    const selectedFile = event.target.files[0];
+  quitCompany(){
+    console.log(this.producer?.id)
+    this.profileService.QuitCompany(this.producer?.id).subscribe(
+      (res: HttpResponse<any>) => {
+        if (res.ok) {
+          window.location.reload();
+        } else {
+          window.location.reload();
+          window.alert("Erreur pour quitter la compagnie");
+        }
+      }
+    )
   }
   toggleCreateCompanyForm() {
     this.showCreateCompanyForm = !this.showCreateCompanyForm;
@@ -92,4 +102,8 @@ export class ProfileComponent implements OnInit {
   toggleJoinCompanyForm() {
     this.showJoinCompanyForm = !this.showJoinCompanyForm;
   }
+  onFileSelected(event: any) {
+    const selectedFile = event.target.files[0];
+  }
+  
 }

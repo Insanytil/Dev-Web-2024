@@ -1,12 +1,13 @@
 package users
 
 import (
-	"net/http"
-	"strconv"
-
 	"local_eat/api/initializers"
 	"local_eat/api/middleware"
 	"local_eat/api/models"
+	"net/http"
+	"strconv"
+
+	"encoding/json"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +19,7 @@ func Routes(route *gin.Engine) {
 		users.GET("get-company", middleware.AuthMiddleware, GetCompany)
 		users.GET("get-producer", middleware.AuthMiddleware, GetProducer)
 		users.POST("/create-company", middleware.AuthMiddleware, CreateCompany)
+		users.POST("/quit-company", middleware.AuthMiddleware, QuitCompany)
 	}
 }
 
@@ -146,4 +148,32 @@ func CreateCompany(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusCreated, gin.H{})
+}
+
+type RequestBody struct {
+	ProducerId int `json:"ProducerId"`
+}
+
+func QuitCompany(context *gin.Context) {
+	// Déclaration de la variable pour stocker le corps de la requête
+	var requestBody RequestBody
+
+	// Lecture du corps de la requête et décodage du JSON
+	err := json.NewDecoder(context.Request.Body).Decode(&requestBody)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error decoding request body"})
+		return
+	}
+	defer context.Request.Body.Close()
+
+	// Vous pouvez maintenant accéder à la valeur de ProducerId
+	producerID := requestBody.ProducerId
+
+	deleteResult := initializers.DB.Where("producer_id = ?", producerID).Delete(&models.RelCompProd{})
+	if deleteResult.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error deleting company association from database"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{})
 }

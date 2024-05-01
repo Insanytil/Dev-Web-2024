@@ -47,7 +47,7 @@
                     <p>Numéro de téléphone : {{ company.PhoneNum }}</p>
                     <p>Numéro de TVA : {{ company.VATNum }}</p>
                     <p>Description : {{ company.Description }}</p><br>
-                    <div class="card-action"><a href="#">Quitter la compagnie</a></div>
+                    <div class="card-action"><a (click)="quitCompany()">Quitter la compagnie</a></div>
                 </ng-container>
                 <!-- Sinon, afficher les options pour créer ou rejoindre une compagnie -->
                 <ng-container *ngIf="!(company) && !showCreateCompanyForm && !showJoinCompanyForm">
