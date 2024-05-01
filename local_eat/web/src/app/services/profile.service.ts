@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user.model';
 import { Company } from '../models/company.model';
+import { Producer } from 'src/app/models/producer.model';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -12,6 +13,7 @@ import { catchError } from 'rxjs/operators';
 export class ProfileService {
   private url = `${environment.apiUrl}/users`
   GET_COMPANY_URL  = '/get-company'
+  GET_PRODUCER_URL = '/get-producer'
   CREATE_COMPANY_URL = '/create-company'
   constructor(private http: HttpClient) { }
 
@@ -21,6 +23,10 @@ export class ProfileService {
   getCompany(): Observable<Company> {
     return this.http.get<Company>(this.url + this.GET_COMPANY_URL);
   }
+  getProducer(): Observable<Producer> {
+    return this.http.get<Producer>(this.url + this.GET_PRODUCER_URL);
+  }
+
   CreateCompany(CompanyName: string, Password: string, Alias: string, Address: string,
      Mail: string, PhoneNum: string, VATNum: string, Description: string): Observable<any> {
     const userData = {

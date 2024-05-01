@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from 'src/app/services/profile.service';
 import { User } from 'src/app/models/user.model';
 import { Company } from 'src/app/models/company.model';
+import { Producer } from 'src/app/models/producer.model';
 import { HttpResponse } from '@angular/common/http';
 
 @Component({
@@ -14,6 +15,7 @@ export class ProfileComponent implements OnInit {
 
   public user: User | undefined;
   public company: Company | undefined;
+  public producer: Producer | undefined;
   public showCreateCompanyForm: boolean = false;
   public showJoinCompanyForm: boolean = false;
 
@@ -30,6 +32,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.getUser();
     this.getCompany();
+    this.getProducer();
   }
 
   getUser() {
@@ -42,7 +45,17 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
-  
+
+  getProducer() {
+    this.profileService.getProducer().subscribe(
+      (dataProducer) => {
+        this.producer = dataProducer;
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
   getCompany(){
     this.profileService.getCompany().subscribe(
       (dataCompany) => {

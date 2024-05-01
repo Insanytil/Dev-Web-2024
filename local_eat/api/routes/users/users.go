@@ -16,6 +16,7 @@ func Routes(route *gin.Engine) {
 	{
 		users.GET("", middleware.AuthMiddleware, GetUsers)
 		users.GET("get-company", middleware.AuthMiddleware, GetCompany)
+		users.GET("get-producer", middleware.AuthMiddleware, GetProducer)
 		users.POST("/create-company", middleware.AuthMiddleware, CreateCompany)
 	}
 }
@@ -39,6 +40,25 @@ func GetUsers(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusOK, foundUser)
+}
+func GetProducer(context *gin.Context) {
+	user, ok := context.Get("user")
+	if !ok {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found in context"})
+		return
+	}
+	foundUser := user.(models.Users).Username
+	var producer models.Producers
+	result := initializers.DB.Where("username = ?", *foundUser).First(&producer)
+	if result.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving producer from database"})
+		return
+	}
+	if result.RowsAffected == 0 {
+		context.JSON(http.StatusNotFound, gin.H{"error": "Producer not found"})
+		return
+	}
+	context.JSON(http.StatusOK, producer)
 }
 func GetCompany(context *gin.Context) {
 	user, ok := context.Get("user")
@@ -71,6 +91,7 @@ func GetCompany(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, company)
 }
+
 func CreateCompany(context *gin.Context) {
 	user, ok := context.Get("user")
 	if !ok {

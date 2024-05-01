@@ -1,6 +1,9 @@
 export interface Producer {
-    id: number;
-    name: string;
-    picture: string;
-    created: Date;
+    emailPro: string;
+    firstname: string;
+    id: string;
+    lastname: string;
+    phoneNum: string;
+    username: string;
 }
+
