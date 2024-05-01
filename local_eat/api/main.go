@@ -12,6 +12,7 @@ import (
 	_ "local_eat/api/docs"
 	"local_eat/api/initializers"
 	"local_eat/api/routes/auth"
+	"local_eat/api/routes/producers"
 	"local_eat/api/routes/users"
 
 	"github.com/gin-contrib/cors"
@@ -50,6 +51,7 @@ func main() {
 	}
 	users.Routes(router)
 	auth.Routes(router)
+	producers.Routes(router)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // The url pointing to API definition
 	log.Println("Web server is available on port 8080")
 	go func() {

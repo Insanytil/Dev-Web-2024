@@ -36,6 +36,7 @@ func Routes(route *gin.Engine) {
 // @Failure 500 "Internal server error"
 // @Router /api/auth/signup [post]
 func signup(context *gin.Context) {
+
 	var body model.Users
 	if context.BindJSON(&body) != nil {
 		context.JSON(http.StatusBadRequest, gin.H{

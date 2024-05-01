@@ -2,91 +2,123 @@ package users
 
 import (
 	"net/http"
+	"strconv"
 
 	"local_eat/api/initializers"
 	"local_eat/api/middleware"
 	"local_eat/api/models"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 func Routes(route *gin.Engine) {
-	users := route.Group("/api/producers")
+	users := route.Group("/api/users")
 	{
-		users.GET("", GetProducers)
-		users.POST("/register", middleware.AuthMiddleware, RegisterProducers)
+		users.GET("", middleware.AuthMiddleware, GetUsers)
+		users.GET("get-company", middleware.AuthMiddleware, GetCompany)
+		users.POST("/create-company", middleware.AuthMiddleware, CreateCompany)
 	}
 }
 
-// swagger:operation GET /api/producers Producers GetProducersRequest
-// GET Producers
-// @Summary Get producers
-// @Description Get producers id, name, picture and created values
-// @Tags Producers
-// @Produce json
-// @Success 200 {array} models.Producers
-// @Failure 404 "Not found"
-// @Failure 500 "Internal server error"
-// @Router /api/producers [get]
-func GetProducers(context *gin.Context) {
-	var producers []*models.Producers
-	result := initializers.DB.Find(&producers)
+func GetUsers(context *gin.Context) {
+	user, ok := context.Get("user")
+	if !ok {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found in context"})
+		return
+	}
+	username := *user.(models.Users).Username
+
+	var foundUser models.Users
+	result := initializers.DB.Where("username = ?", username).First(&foundUser)
+	if result.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving user from database"})
+		return
+	}
 	if result.RowsAffected == 0 {
-		context.JSON(http.StatusNotFound, gin.H{})
-		return
-
-	}
-	if result.Error != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{})
+		context.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
-	context.JSON(http.StatusOK, producers)
+	context.JSON(http.StatusOK, foundUser)
 }
-
-// swagger:operation POST /api/producers/register PostProducersRequest
-// POST producers
-// @Summary POST producers
-// @Description Post producer Lastname, Firstname, Phone number and pro email
-// @Tags Producers
-// @Accept json
-// @Produce json
-// @Param body body models.Producers true "Producer object to be registered"
-// @Success 201 "Producteur created"
-// @Failure 400 "Bad request"
-// @Failure 500 "Internal server error"
-// @Router /api/producers/register [post]
-func RegisterProducers(context *gin.Context) {
-	// Récupérer le nom d'utilisateur du contexte
-	user, _ := context.Get("user")
-
-	var body models.Producers
-	if context.BindJSON(&body) != nil {
-		context.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request",
-		})
+func GetCompany(context *gin.Context) {
+	user, ok := context.Get("user")
+	if !ok {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found in context"})
 		return
 	}
-
-	newProducer := models.Producers{
-		Username:  *user.(models.Users).Username,
-		Firstname: body.Firstname,
-		Lastname:  body.Lastname,
-		PhoneNum:  body.PhoneNum,
-		EmailPro:  body.EmailPro,
-	}
-
-	var oldProducer models.Producers
-	exists := initializers.DB.First(&oldProducer, "username = ?", newProducer.Username)
-	if exists.Error != gorm.ErrRecordNotFound {
-		context.JSON(http.StatusBadRequest, gin.H{
-			"error": "User already a producer",
-		})
-		return
-	}
-
-	result := initializers.DB.Create(&newProducer)
+	foundUser := user.(models.Users).Username
+	var producer models.Producers
+	result := initializers.DB.Where("username = ?", *foundUser).First(&producer)
 	if result.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving producer from database"})
+		return
+	}
+	if result.RowsAffected == 0 {
+		context.JSON(http.StatusNotFound, gin.H{"error": "Producer not found"})
+		return
+	}
+	var relCompProd models.RelCompProd
+	result2 := initializers.DB.Where("producer_id = ?", producer.ID).First(&relCompProd)
+	if result2.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving CompanyName from database"})
+		return
+	}
+	var company models.Company
+	result3 := initializers.DB.Where("company_name = ?", relCompProd.CompanyName).First(&company)
+	if result3.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving company from database"})
+		return
+	}
+	context.JSON(http.StatusOK, company)
+}
+func CreateCompany(context *gin.Context) {
+	user, ok := context.Get("user")
+	if !ok {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found in context"})
+		return
+	}
+	foundUser := user.(models.Users).Username
+
+	var body models.Company
+	if err := context.BindJSON(&body); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var producer models.Producers
+	result := initializers.DB.Where("username = ?", *foundUser).First(&producer)
+	if result.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving producer from database"})
+		return
+	}
+	if result.RowsAffected == 0 {
+		context.JSON(http.StatusNotFound, gin.H{"error": "Producer not found"})
+		return
+	}
+
+	newCompany := models.Company{
+		CompanyName: body.CompanyName,
+		Password:    body.Password,
+		Alias:       body.Alias,
+		Address:     body.Address,
+		Mail:        body.Mail,
+		PhoneNum:    body.PhoneNum,
+		VATNum:      body.VATNum,
+		Description: body.Description,
+	}
+	companyResult := initializers.DB.Create(&newCompany)
+	if companyResult.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Internal server error",
+		})
+		return
+	}
+	newRel := models.RelCompProd{
+		ProducerID:  strconv.Itoa(producer.ID),
+		CompanyName: body.CompanyName,
+	}
+	relResult := initializers.DB.Create(&newRel)
+	if relResult.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Internal server error",
 		})
