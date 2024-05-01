@@ -25,10 +25,12 @@ create table catalog_details(
     created_at datetime default current_timestamp,
     quantity int default 0,
     availability bit default 1,
+    price DECIMAL(6,2) default 0.00,
     primary key (id),
     foreign key (company_name) references companies(company_name),
     foreign key (product_id) references products(id),
     unique (company_name, product_id)
+
 );
 
 create table shop_cart_details(

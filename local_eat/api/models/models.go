@@ -45,6 +45,7 @@ type CatalogDetails struct {
 	CreatedAt    time.Time `json:"createdAt" example:"Mon Jan 2 15:04:05 MST 2006"`
 	Quantity     int       `json:"Quantity" example:"10" gorm:"default:0"`
 	Availability bool      `json:"Availability" example:"true" gorm:"default:true"`
+	Price        float64   `gorm:"type:decimal(10,2); default:0.00"`
 }
 
 type Company struct {
