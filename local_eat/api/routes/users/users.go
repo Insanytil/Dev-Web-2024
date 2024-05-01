@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Routes(route *gin.Engine) {
@@ -19,6 +20,7 @@ func Routes(route *gin.Engine) {
 		users.GET("get-company", middleware.AuthMiddleware, GetCompany)
 		users.GET("get-producer", middleware.AuthMiddleware, GetProducer)
 		users.POST("/create-company", middleware.AuthMiddleware, CreateCompany)
+		users.POST("/join-company", middleware.AuthMiddleware, JoinCompany)
 		users.POST("/quit-company", middleware.AuthMiddleware, QuitCompany)
 	}
 }
@@ -108,6 +110,12 @@ func CreateCompany(context *gin.Context) {
 		return
 	}
 
+	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Internal server error"})
+		return
+	}
 	var producer models.Producers
 	result := initializers.DB.Where("username = ?", *foundUser).First(&producer)
 	if result.Error != nil {
@@ -121,7 +129,7 @@ func CreateCompany(context *gin.Context) {
 
 	newCompany := models.Company{
 		CompanyName: body.CompanyName,
-		Password:    body.Password,
+		Password:    string(hash),
 		Alias:       body.Alias,
 		Address:     body.Address,
 		Mail:        body.Mail,
@@ -149,12 +157,63 @@ func CreateCompany(context *gin.Context) {
 	}
 	context.JSON(http.StatusCreated, gin.H{})
 }
+func JoinCompany(context *gin.Context) {
+	var body models.Company
+	if context.BindJSON(&body) != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid request"})
+		return
+	}
+	var company models.Company
+	resultCompany := initializers.DB.First(&company, "company_name = ?", body.CompanyName)
+	if resultCompany.Error != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid company name"})
+		return
+	}
+	if bcrypt.CompareHashAndPassword([]byte(company.Password), []byte(body.Password)) != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid password"})
+		return
+	}
 
-type RequestBody struct {
-	ProducerId int `json:"ProducerId"`
+	user, ok := context.Get("user")
+	if !ok {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found in context"})
+		return
+	}
+	foundUser := user.(models.Users).Username
+
+	var producer models.Producers
+	resultProducer := initializers.DB.Where("username = ?", *foundUser).First(&producer)
+	if resultProducer.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving producer from database"})
+		return
+	}
+	if resultProducer.RowsAffected == 0 {
+		context.JSON(http.StatusNotFound, gin.H{"error": "Producer not found"})
+		return
+	}
+
+	newRel := models.RelCompProd{
+		ProducerID:  strconv.Itoa(producer.ID),
+		CompanyName: body.CompanyName,
+	}
+	relResult := initializers.DB.Create(&newRel)
+	if relResult.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Internal server error",
+		})
+		return
+	}
+	context.JSON(http.StatusCreated, gin.H{})
+
 }
 
 func QuitCompany(context *gin.Context) {
+	type RequestBody struct {
+		ProducerId int `json:"ProducerId"`
+	}
 	// Déclaration de la variable pour stocker le corps de la requête
 	var requestBody RequestBody
 

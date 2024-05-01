@@ -81,7 +81,16 @@ export class ProfileComponent implements OnInit {
     )
   }
   joinCompany(){
-
+    this.profileService.JoinCompany(this.CompanyName, this.Password).subscribe(
+        (res: HttpResponse<any>) => {
+          if (res.ok) {
+            window.location.reload();
+          } else {
+            window.location.reload();
+            window.alert("Erreur pour rejoindre la compagnie");
+          }
+        }
+      )
   }
   quitCompany(){
     console.log(this.producer?.id)

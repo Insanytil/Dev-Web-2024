@@ -15,6 +15,7 @@ export class ProfileService {
   GET_COMPANY_URL  = '/get-company'
   GET_PRODUCER_URL = '/get-producer'
   CREATE_COMPANY_URL = '/create-company'
+  JOIN_COMPANY_URL = '/join-company'
   QUIT_COMPANY_URL = '/quit-company'
   constructor(private http: HttpClient) { }
 
@@ -47,6 +48,22 @@ export class ProfileService {
     };
 
     return this.http.post<any>(this.url + this.CREATE_COMPANY_URL, userData, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  JoinCompany(CompanyName: string, Password: string): Observable<any> {
+    const userData = {
+      "CompanyName": CompanyName,
+      "Password": Password,
+    }
+    console.log(userData)
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      withCredentials: true,
+      observe: 'response' as 'response'
+    };
+    return this.http.post<any>(this.url + this.JOIN_COMPANY_URL, userData, httpOptions)
       .pipe(
         catchError(this.handleError)
       );

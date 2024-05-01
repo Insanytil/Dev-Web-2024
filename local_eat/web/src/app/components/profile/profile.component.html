@@ -73,8 +73,8 @@
                 </form>
                 <!-- Formulaire de rejoindre une compagnie -->
                 <form *ngIf="showJoinCompanyForm" (ngSubmit)="joinCompany()">
-                    <input type="text" placeholder="Nom de la compagnie">
-                    <input type="text" placeholder="Mot de passe de la compagnie">
+                    <input type="text" name ="CompanyName" placeholder="Nom de la compagnie" [(ngModel)]="CompanyName">
+                    <input type="text" name="Password" placeholder="Mot de passe de la compagnie" [(ngModel)]="Password">
                     <button type="submit">Rejoindre</button>
                     <button type="button" (click)="toggleJoinCompanyForm()">Annuler</button>
                 </form>
