@@ -37,7 +37,7 @@ func LoadEnv() {
 
 func SyncDB() {
 	err := DB.AutoMigrate(&model.Users{}, &model.Producers{}, &model.Category{}, &model.Product{},
-		&model.Company{}, &model.RelCompProd{})
+		&model.Company{}, &model.CatalogDetails{}, &model.RelCompProd{})
 	if err != nil {
 		log.Fatal(err)
 	}

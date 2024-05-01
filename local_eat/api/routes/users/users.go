@@ -5,7 +5,6 @@ import (
 	"local_eat/api/middleware"
 	"local_eat/api/models"
 	"net/http"
-	"strconv"
 
 	"encoding/json"
 
@@ -145,7 +144,7 @@ func CreateCompany(context *gin.Context) {
 		return
 	}
 	newRel := models.RelCompProd{
-		ProducerID:  strconv.Itoa(producer.ID),
+		ProducerID:  producer.ID,
 		CompanyName: body.CompanyName,
 	}
 	relResult := initializers.DB.Create(&newRel)
@@ -196,7 +195,7 @@ func JoinCompany(context *gin.Context) {
 	}
 
 	newRel := models.RelCompProd{
-		ProducerID:  strconv.Itoa(producer.ID),
+		ProducerID:  producer.ID,
 		CompanyName: body.CompanyName,
 	}
 	relResult := initializers.DB.Create(&newRel)
