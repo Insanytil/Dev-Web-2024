@@ -72,9 +72,10 @@ export class ProfileComponent implements OnInit {
     this.Address, this.Mail, this.PhoneNum, this.VATNum, this.Description).subscribe(
       (res: HttpResponse<any>) => {
         if (res.ok) {
-          this.router.navigate(['/profil']);
+          window.location.reload();
         } else {
-          console.error('Error:', res.body.error);
+          window.location.reload();
+          window.alert("Erreur lors de la création de la compagnie");
         }
       }
     )
