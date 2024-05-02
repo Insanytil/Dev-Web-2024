@@ -19,6 +19,8 @@ export class ProfileComponent implements OnInit {
   public showCreateCompanyForm: boolean = false;
   public showJoinCompanyForm: boolean = false;
 
+  public fileToUpload: File | null = null;
+
   constructor(private profileService: ProfileService, private router: Router) { }
   CompanyName: string = '';
   Password: string = '';
@@ -111,8 +113,4 @@ export class ProfileComponent implements OnInit {
   toggleJoinCompanyForm() {
     this.showJoinCompanyForm = !this.showJoinCompanyForm;
   }
-  onFileSelected(event: any) {
-    const selectedFile = event.target.files[0];
-  }
-  
 }

@@ -15,6 +15,8 @@ import { RegisterProducersComponent } from './components/register-producers/regi
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProductsComponent } from './components/products/products.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ProductsManagementComponent } from './components/products-management/products-management.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -41,7 +43,9 @@ const routes: Routes = [
         RegisterProducersComponent,
         DashboardComponent,
         ProductsComponent,
-        ProfileComponent
+        ProfileComponent,
+        ProductsManagementComponent,
+        FileUploadComponent,
     ],
     imports: [
         BrowserModule,
