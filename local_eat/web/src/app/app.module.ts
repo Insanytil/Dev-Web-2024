@@ -7,7 +7,7 @@ import { ProducersComponent } from './components/producers/producers.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { NavComponent} from "./components/nav/nav.component";
+import { NavComponent } from "./components/nav/nav.component";
 import { CatchphraseComponent } from './components/catchphrase/catchphrase.component';
 import { FormsModule } from '@angular/forms';
 import { CustomInterceptor } from './interceptors/custom-interceptor';
@@ -17,41 +17,41 @@ import { ProductsComponent } from './components/products/products.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full'},
-  { path: 'home', component: DashboardComponent },
-  { path: 'producers', component: ProducersComponent },
-  { path: 'products', component: ProductsComponent },
-  { path: 'login', component: LoginComponent},
-  { path: 'signup', component: SignupComponent},
-  { path: 'register-producers', component:RegisterProducersComponent},
-  { path: 'profil', component:ProfileComponent},
-  { path: '**', component: NotFoundComponent},
-  
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'home', component: DashboardComponent },
+    { path: 'producers', component: ProducersComponent },
+    { path: 'products', component: ProductsComponent },
+    { path: 'login', component: LoginComponent },
+    { path: 'signup', component: SignupComponent },
+    { path: 'register-producers', component: RegisterProducersComponent },
+    { path: 'profil', component: ProfileComponent },
+    { path: '**', component: NotFoundComponent },
+
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ProducersComponent,
-    NotFoundComponent,
-    LoginComponent,
-    SignupComponent,
-    CatchphraseComponent,
-    NavComponent,
-    RegisterProducersComponent,
-    DashboardComponent,
-    ProductsComponent,
-    ProfileComponent
-  ],
-  imports: [
-    BrowserModule,
-    RouterModule.forRoot(routes),
-    HttpClientModule,
-    FormsModule
-  ],
-  providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: CustomInterceptor, multi: true}
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        ProducersComponent,
+        NotFoundComponent,
+        LoginComponent,
+        SignupComponent,
+        CatchphraseComponent,
+        NavComponent,
+        RegisterProducersComponent,
+        DashboardComponent,
+        ProductsComponent,
+        ProfileComponent
+    ],
+    imports: [
+        BrowserModule,
+        RouterModule.forRoot(routes),
+        HttpClientModule,
+        FormsModule
+    ],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: CustomInterceptor, multi: true }
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

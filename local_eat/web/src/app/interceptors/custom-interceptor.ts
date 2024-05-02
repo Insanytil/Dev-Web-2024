@@ -6,22 +6,22 @@ import { catchError, tap } from 'rxjs/operators';
 @Injectable()
 export class CustomInterceptor implements HttpInterceptor {
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log("Outgoing request:", request);
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        console.log("Outgoing request:", request);
 
-    // Modifiez la requête sortante si nécessaire
-    request = request.clone({ withCredentials: true });
+        // Modifiez la requête sortante si nécessaire
+        request = request.clone({ withCredentials: true });
 
-    return next.handle(request).pipe(
-      tap((event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse) {
-          console.log("Incoming response:", event);
-        }
-      }),
-      catchError(error => {
-        console.error("Error:", error);
-        throw error;
-      })
-    );
-  }
+        return next.handle(request).pipe(
+            tap((event: HttpEvent<any>) => {
+                if (event instanceof HttpResponse) {
+                    console.log("Incoming response:", event);
+                }
+            }),
+            catchError(error => {
+                console.error("Error:", error);
+                throw error;
+            })
+        );
+    }
 }

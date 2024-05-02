@@ -40,6 +40,7 @@ services:
       DB_PORT: 3306
       DB_HOST: db
       JWT_KEY: ${JWT_KEY}
+      profile: prod
     networks:
       - api
       - db

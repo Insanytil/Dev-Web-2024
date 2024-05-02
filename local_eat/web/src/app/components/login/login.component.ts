@@ -4,30 +4,30 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  username: string;
-  password: string;
+    username: string;
+    password: string;
 
-  constructor(private authService: AuthService, private router: Router) { }
+    constructor(private authService: AuthService, private router: Router) { }
 
-  login() {
-    this.authService.login(this.username, this.password).subscribe(
-      (res: HttpResponse<any>) => {
-        console.log('response from server:', res);
-        console.log('response headers', res.headers.keys());
-        if (res.ok) {
-          this.router.navigate(['/']);
-        } else {
-          console.error('Error:', res.body.error);
-        }
-      },
-      error => {
-        console.error('Error:', error);
-      }
-    );
-  }
+    login() {
+        this.authService.login(this.username, this.password).subscribe(
+            (res: HttpResponse<any>) => {
+                console.log('response from server:', res);
+                console.log('response headers', res.headers.keys());
+                if (res.ok) {
+                    this.router.navigate(['/']);
+                } else {
+                    console.error('Error:', res.body.error);
+                }
+            },
+            error => {
+                console.error('Error:', error);
+            }
+        );
+    }
 }
