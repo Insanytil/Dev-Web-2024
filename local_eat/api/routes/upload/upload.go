@@ -3,6 +3,9 @@ package upload
 import (
 	"fmt"
 	"io"
+	"local_eat/api/initializers"
+	"local_eat/api/middleware"
+	"local_eat/api/models"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -13,47 +16,79 @@ import (
 func Routes(route *gin.Engine) {
 	upload := route.Group("/api/upload")
 	{
-		upload.POST("", uploadFile)
+		upload.POST("", middleware.AuthMiddleware, uploadFile)
 	}
 }
 
-func uploadFile(c *gin.Context) {
-	fmt.Println("File Upload Endpoint Hit")
-	err := c.Request.ParseMultipartForm(10 << 20) // 10MB max file size
-	if err != nil {
-		c.String(http.StatusBadRequest, "Error parsing form: %v", err)
+func uploadFile(context *gin.Context) {
+	user, _ := context.Get("user")
+	foundUser := user.(models.Users).Username
+	var producer models.Producers
+
+	result := initializers.DB.Where("username = ?", *foundUser).First(&producer)
+	if result.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving producer from database"})
 		return
 	}
-	file, handler, err := c.Request.FormFile("myFile")
+	if result.RowsAffected == 0 {
+		context.JSON(http.StatusNotFound, gin.H{"error": "Producer not found"})
+		return
+	}
+	var relCompProd models.RelCompProd
+	result2 := initializers.DB.Where("producer_id = ?", producer.ID).First(&relCompProd)
+	if result2.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving CompanyName from database"})
+		return
+	}
+	var company models.Company
+	result3 := initializers.DB.Where("company_name = ?", relCompProd.CompanyName).First(&company)
+	if result3.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving company from database"})
+		return
+	}
+	var catalogDetails models.CatalogDetails
+	var currentProductCount int
+	if err := initializers.DB.First(&catalogDetails, "company_name = ?", company.CompanyName).Error; err != nil {
+		currentProductCount = 0
+	} else {
+		var maxID int
+		if err := initializers.DB.Model(&models.CatalogDetails{}).Where("company_name = ?", company.CompanyName).Select("MAX(id)").Row().Scan(&maxID); err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Failed to get max ID"})
+			return
+		}
+		currentProductCount = maxID + 1
+	}
+
+	file, _, err := context.Request.FormFile("myFile")
 	if err != nil {
-		c.String(http.StatusBadRequest, "Error retrieving the file: %v", err)
+		context.String(http.StatusBadRequest, "Error retrieving the file: %v", err)
 		return
 	}
 	defer file.Close()
 
-	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
-	fmt.Printf("File Size: %+v\n", handler.Size)
-	fmt.Printf("MIME Header: %+v\n", handler.Header)
+	filename := fmt.Sprintf("produit_%d.png", currentProductCount)
 
-	tempDir := os.TempDir()
-	tempImagesDir := filepath.Join(tempDir, "temp-images")
-	err = os.MkdirAll(tempImagesDir, 0755)
+	uploadDir := "images/" + company.CompanyName + "/"
+	err = os.MkdirAll(uploadDir, 0755)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Error creating temp directory: %v", err)
+		context.String(http.StatusInternalServerError, "Error creating upload directory: %v", err)
 		return
 	}
-	tempFile, err := os.CreateTemp(tempImagesDir, "upload-*.png")
+	filePath := filepath.Join(uploadDir, filename)
+
+	newFile, err := os.Create(filePath)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Error creating temporary file: %v", err)
+		context.String(http.StatusInternalServerError, "Error creating file: %v", err)
 		return
 	}
-	defer tempFile.Close()
+	defer newFile.Close()
 
-	_, err = io.Copy(tempFile, file)
+	_, err = io.Copy(newFile, file)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Error copying file contents: %v", err)
+		context.String(http.StatusInternalServerError, "Error copying file contents: %v", err)
 		return
 	}
 
-	c.String(http.StatusOK, "Successfully Uploaded File\n, tempImagesDir: %v", tempImagesDir)
+	context.String(http.StatusOK, "Successfully uploaded file: %s", filePath)
 }

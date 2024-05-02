@@ -1,4 +1,6 @@
-<form (ngSubmit)="uploadFile()" enctype="multipart/form-data">
-    <input type="file" (change)="onFileSelected($event)" />
-    <button type="submit">Upload</button>
-  </form>
+<div>
+  <input type="file" (change)="onFileSelected($event)">
+  <span *ngIf="selectedFileName && !uploadStatus" style="color: black;">Fichier sélectionné : {{ selectedFileName }}</span>
+  <span *ngIf="uploadStatus" style="color: black;">{{ uploadStatus }}</span>
+</div>
+<button (click)="uploadFile()">Uploader</button>
