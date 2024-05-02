@@ -19,8 +19,6 @@ func Routes(route *gin.Engine) {
 	}
 }
 
-// swagger:operation GET /api/producers Producers GetProducersRequest
-// GET Producers
 // @Summary Get producers
 // @Description Get producers id, name, picture and created values
 // @Tags Producers
@@ -44,14 +42,13 @@ func GetProducers(context *gin.Context) {
 	context.JSON(http.StatusOK, producers)
 }
 
-// swagger:operation POST /api/producers/register PostProducersRequest
-// POST producers
 // @Summary POST producers
 // @Description Post producer Lastname, Firstname, Phone number and pro email
 // @Tags Producers
 // @Accept json
 // @Produce json
 // @Param body body models.Producers true "Producer object to be registered"
+// @Security JWT
 // @Success 201 "Producteur created"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"

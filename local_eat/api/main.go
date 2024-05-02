@@ -33,7 +33,9 @@ func init() {
 // @host localhost:8080
 // @BasePath /
 // @schemes http
-// @produce json
+// @securitydefinitions.apikey  JWT
+// @in                          header
+// @name                        token
 func main() {
 	// CORS is enabled only in prod profile
 	router := gin.Default()
@@ -45,6 +47,13 @@ func main() {
 		router.Use(cors.New(cors.Config{
 			AllowOrigins:     []string{"http://localhost:3000", "https://localeat.ephec-ti.be"}, // Spécifiez votre origine Angular
 			AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "DELETE"},
+			AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Cache-Control", "X-Requested-With", "Set-Cookie"},
+			AllowCredentials: true,
+		}))
+	} else if os.Getenv("profile") == "prod" {
+		router.Use(cors.New(cors.Config{
+			AllowOrigins:     []string{"https://localeat.ephec-ti.be"},
+			AllowMethods:     []string{"GET", "POST", "DELETE"},
 			AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Cache-Control", "X-Requested-With", "Set-Cookie"},
 			AllowCredentials: true,
 		}))

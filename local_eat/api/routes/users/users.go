@@ -20,36 +20,47 @@ func Routes(route *gin.Engine) {
 		users.GET("get-producer", middleware.AuthMiddleware, GetProducer)
 		users.POST("/create-company", middleware.AuthMiddleware, CreateCompany)
 		users.POST("/join-company", middleware.AuthMiddleware, JoinCompany)
-		users.POST("/quit-company", middleware.AuthMiddleware, QuitCompany)
+		users.DELETE("/quit-company", middleware.AuthMiddleware, QuitCompany)
 	}
 }
 
+// @Summary Get users
+// @Description Get the user info of the logged in user
+// @Tags Users
+// @Produce json
+// @Success 200 {object} models.Users
+// @Failure 400 "Bad request"
+// @Failure 500 "Internal server error"
+// @Router /api/users [get]
+// @Security JWT
 func GetUsers(context *gin.Context) {
-	user, ok := context.Get("user")
-	if !ok {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found in context"})
-		return
-	}
+	user, _ := context.Get("user")
 	username := *user.(models.Users).Username
 
 	var foundUser models.Users
 	result := initializers.DB.Where("username = ?", username).First(&foundUser)
 	if result.Error != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving user from database"})
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
 	if result.RowsAffected == 0 {
-		context.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		context.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
 		return
 	}
 	context.JSON(http.StatusOK, foundUser)
 }
+
+// @Summary Get producers
+// @Description Get the producer info of the logged in user
+// @Tags Producer
+// @Produce json
+// @Success 200 {object} models.Producers
+// @Failure 400 "Bad request"
+// @Failure 500 "Internal server error"
+// @Router /api/users/get-producer [get]
+// @Security JWT
 func GetProducer(context *gin.Context) {
-	user, ok := context.Get("user")
-	if !ok {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found in context"})
-		return
-	}
+	user, _ := context.Get("user")
 	foundUser := user.(models.Users).Username
 	var producer models.Producers
 	result := initializers.DB.Where("username = ?", *foundUser).First(&producer)
@@ -58,19 +69,26 @@ func GetProducer(context *gin.Context) {
 		return
 	}
 	if result.RowsAffected == 0 {
-		context.JSON(http.StatusNotFound, gin.H{"error": "Producer not found"})
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Producer not found"})
 		return
 	}
 	context.JSON(http.StatusOK, producer)
 }
+
+// @Summary Get companies
+// @Description Get the companies info of the logged in user
+// @Tags Company
+// @Produce json
+// @Success 200 {object} models.Company
+// @Failure 400 "Bad request"
+// @Failure 500 "Internal server error"
+// @Router /api/users/get-company [get]
+// @Security JWT
 func GetCompany(context *gin.Context) {
-	user, ok := context.Get("user")
-	if !ok {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found in context"})
-		return
-	}
+	user, _ := context.Get("user")
 	foundUser := user.(models.Users).Username
 	var producer models.Producers
+
 	result := initializers.DB.Where("username = ?", *foundUser).First(&producer)
 	if result.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving producer from database"})
@@ -95,12 +113,16 @@ func GetCompany(context *gin.Context) {
 	context.JSON(http.StatusOK, company)
 }
 
+// @Summary Create companies
+// @Description Create a new company with the necessary info
+// @Tags Company
+// @Success 201 "Company created"
+// @Failure 400 "Bad request"
+// @Failure 500 "Internal server error"
+// @Router /api/users/create-company [post]
+// @Security JWT
 func CreateCompany(context *gin.Context) {
-	user, ok := context.Get("user")
-	if !ok {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found in context"})
-		return
-	}
+	user, _ := context.Get("user")
 	foundUser := user.(models.Users).Username
 
 	var body models.Company
@@ -156,6 +178,15 @@ func CreateCompany(context *gin.Context) {
 	}
 	context.JSON(http.StatusCreated, gin.H{})
 }
+
+// @Summary Join companies
+// @Description Join a producer to the selected company
+// @Tags Producer, Company
+// @Success 200 "Company joined successfully"
+// @Failure 400 "Bad request"
+// @Failure 500 "Internal server error"
+// @Router /api/users/join-company [post]
+// @Security JWT
 func JoinCompany(context *gin.Context) {
 	var body models.Company
 	if context.BindJSON(&body) != nil {
@@ -176,11 +207,7 @@ func JoinCompany(context *gin.Context) {
 		return
 	}
 
-	user, ok := context.Get("user")
-	if !ok {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found in context"})
-		return
-	}
+	user, _ := context.Get("user")
 	foundUser := user.(models.Users).Username
 
 	var producer models.Producers
@@ -209,6 +236,14 @@ func JoinCompany(context *gin.Context) {
 
 }
 
+// @Summary Delete company
+// @Description Unlink a the selected company with the logged in producer
+// @Tags Producer, Company
+// @Success 200 "Company quited successfully"
+// @Failure 400 "Bad request"
+// @Failure 500 "Internal server error"
+// @Router /api/users/quit-company [delete]
+// @Security JWT
 func QuitCompany(context *gin.Context) {
 	type RequestBody struct {
 		ProducerId int `json:"ProducerId"`

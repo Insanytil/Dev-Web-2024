@@ -1,5 +1,63 @@
 basePath: /
 definitions:
+  auth.basicAuth:
+    properties:
+      email:
+        example: john_vleminckx@example.com
+        type: string
+      password:
+        example: random_password123
+        type: string
+      username:
+        example: john_vleminckx
+        type: string
+    type: object
+  models.CatalogDetails:
+    properties:
+      Availability:
+        example: true
+        type: boolean
+      CompanyName:
+        example: CompanyTest
+        type: string
+      ProductId:
+        example: "1"
+        type: string
+      Quantity:
+        example: 10
+        type: integer
+      createdAt:
+        example: Mon Jan 2 15:04:05 MST 2006
+        type: string
+      id:
+        example: "1"
+        type: string
+      price:
+        type: number
+    type: object
+  models.Company:
+    properties:
+      CompanyName:
+        type: string
+      address:
+        type: string
+      alias:
+        type: string
+      catalogDetails:
+        $ref: '#/definitions/models.CatalogDetails'
+      description:
+        type: string
+      mail:
+        type: string
+      password:
+        type: string
+      phoneNum:
+        type: string
+      relCompProd:
+        $ref: '#/definitions/models.RelCompProd'
+      vatnum:
+        type: string
+    type: object
   models.Producers:
     properties:
       emailPro:
@@ -17,9 +75,19 @@ definitions:
       phoneNum:
         example: "0483598799"
         type: string
+      relCompProd:
+        $ref: '#/definitions/models.RelCompProd'
       username:
         example: john_vleminckx
         type: string
+    type: object
+  models.RelCompProd:
+    properties:
+      CompanyName:
+        type: string
+      id:
+        example: 1
+        type: integer
     type: object
   models.Users:
     properties:
@@ -58,6 +126,8 @@ paths:
           description: User authenticated
         "401":
           description: Unauthorized
+      security:
+      - JWT: []
       summary: Validate user token
       tags:
       - Auth
@@ -72,7 +142,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.Users'
+          $ref: '#/definitions/auth.basicAuth'
       responses:
         "200":
           description: User authenticated
@@ -81,6 +151,17 @@ paths:
         "500":
           description: Internal server error
       summary: Send username and password to login
+      tags:
+      - Auth
+  /api/auth/logout:
+    delete:
+      description: Modifies token value and sets expiry date to be immediate
+      responses:
+        "200":
+          description: Token deleted successfully
+        "400":
+          description: No token present in request
+      summary: Delete JWT token
       tags:
       - Auth
   /api/auth/signup:
@@ -94,7 +175,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.Users'
+          $ref: '#/definitions/auth.basicAuth'
       responses:
         "200":
           description: User created
@@ -145,11 +226,120 @@ paths:
           description: Bad request
         "500":
           description: Internal server error
+      security:
+      - JWT: []
       summary: POST producers
       tags:
       - Producers
-produces:
-- application/json
+  /api/users:
+    get:
+      description: Get the user info of the logged in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Users'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Get users
+      tags:
+      - Users
+  /api/users/create-company:
+    post:
+      description: Create a new company with the necessary info
+      responses:
+        "201":
+          description: Company created
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Create companies
+      tags:
+      - Company
+  /api/users/get-company:
+    get:
+      description: Get the companies info of the logged in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Company'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Get companies
+      tags:
+      - Company
+  /api/users/get-producer:
+    get:
+      description: Get the producer info of the logged in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Producers'
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Get producers
+      tags:
+      - Producer
+  /api/users/join-company:
+    post:
+      description: Join a producer to the selected company
+      responses:
+        "200":
+          description: Company joined successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Join companies
+      tags:
+      - Producer
+      - Company
+  /api/users/quit-company:
+    delete:
+      description: Unlink a the selected company with the logged in producer
+      responses:
+        "200":
+          description: Company quited successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      security:
+      - JWT: []
+      summary: Delete company
+      tags:
+      - Producer
+      - Company
 schemes:
 - http
+securityDefinitions:
+  JWT:
+    in: header
+    name: token
+    type: apiKey
 swagger: "2.0"

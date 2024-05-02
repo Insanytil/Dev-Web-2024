@@ -5,9 +5,6 @@ import "github.com/swaggo/swag"
 
 const docTemplate = `{
     "schemes": {{ marshal .Schemes }},
-    "produces": [
-        "application/json"
-    ],
     "swagger": "2.0",
     "info": {
         "description": "{{escape .Description}}",
@@ -20,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/api/auth/authenticate": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Validate user token",
                 "produces": [
                     "application/json"
@@ -55,7 +57,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Users"
+                            "$ref": "#/definitions/auth.basicAuth"
                         }
                     }
                 ],
@@ -68,6 +70,23 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "delete": {
+                "description": "Modifies token value and sets expiry date to be immediate",
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Delete JWT token",
+                "responses": {
+                    "200": {
+                        "description": "Token deleted successfully"
+                    },
+                    "400": {
+                        "description": "No token present in request"
                     }
                 }
             }
@@ -89,7 +108,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Users"
+                            "$ref": "#/definitions/auth.basicAuth"
                         }
                     }
                 ],
@@ -137,6 +156,11 @@ const docTemplate = `{
         },
         "/api/producers/register": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "Post producer Lastname, Firstname, Phone number and pro email",
                 "consumes": [
                     "application/json"
@@ -171,9 +195,263 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/users": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Get the user info of the logged in user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Users"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/users/create-company": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Create a new company with the necessary info",
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Create companies",
+                "responses": {
+                    "201": {
+                        "description": "Company created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/users/get-company": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Get the companies info of the logged in user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get companies",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Company"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/users/get-producer": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Get the producer info of the logged in user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Producer"
+                ],
+                "summary": "Get producers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Producers"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/users/join-company": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Join a producer to the selected company",
+                "tags": [
+                    "Producer",
+                    "Company"
+                ],
+                "summary": "Join companies",
+                "responses": {
+                    "200": {
+                        "description": "Company joined successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/users/quit-company": {
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Unlink a the selected company with the logged in producer",
+                "tags": [
+                    "Producer",
+                    "Company"
+                ],
+                "summary": "Delete company",
+                "responses": {
+                    "200": {
+                        "description": "Company quited successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "auth.basicAuth": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "john_vleminckx@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "random_password123"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "john_vleminckx"
+                }
+            }
+        },
+        "models.CatalogDetails": {
+            "type": "object",
+            "properties": {
+                "Availability": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "CompanyName": {
+                    "type": "string",
+                    "example": "CompanyTest"
+                },
+                "ProductId": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "Quantity": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "createdAt": {
+                    "type": "string",
+                    "example": "Mon Jan 2 15:04:05 MST 2006"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.Company": {
+            "type": "object",
+            "properties": {
+                "CompanyName": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "alias": {
+                    "type": "string"
+                },
+                "catalogDetails": {
+                    "$ref": "#/definitions/models.CatalogDetails"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "mail": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phoneNum": {
+                    "type": "string"
+                },
+                "relCompProd": {
+                    "$ref": "#/definitions/models.RelCompProd"
+                },
+                "vatnum": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Producers": {
             "type": "object",
             "properties": {
@@ -197,9 +475,24 @@ const docTemplate = `{
                     "type": "string",
                     "example": "0483598799"
                 },
+                "relCompProd": {
+                    "$ref": "#/definitions/models.RelCompProd"
+                },
                 "username": {
                     "type": "string",
                     "example": "john_vleminckx"
+                }
+            }
+        },
+        "models.RelCompProd": {
+            "type": "object",
+            "properties": {
+                "CompanyName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -230,6 +523,13 @@ const docTemplate = `{
                     "example": "john_vleminckx"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "JWT": {
+            "type": "apiKey",
+            "name": "token",
+            "in": "header"
         }
     }
 }`

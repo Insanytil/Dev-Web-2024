@@ -7,7 +7,7 @@ import (
 
 	"local_eat/api/initializers"
 	"local_eat/api/middleware"
-	model "local_eat/api/models"
+	"local_eat/api/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -15,29 +15,34 @@ import (
 	"gorm.io/gorm"
 )
 
+type basicAuth struct {
+	Password string  `json:"password" example:"random_password123"`
+	Username *string `json:"username,omitempty" example:"john_vleminckx"`
+	Email    *string `json:"email,omitempty" example:"john_vleminckx@example.com"`
+}
+
 func Routes(route *gin.Engine) {
 	users := route.Group("/api/auth")
 	{
 		users.POST("/signup", signup)
 		users.POST("/login", login)
 		users.GET("/authenticate", middleware.AuthMiddleware, authenticate)
+		users.DELETE("/logout", logout)
 	}
 }
 
-// swagger:operation POST /api/auth/signup Auth PostSignupRequest
-// POST Signup
 // @Summary Send user data to create a new user
 // @Description Send user data to create a new user
 // @Tags Auth
 // @Accept json
-// @Param user body models.Users true "User data"
+// @Param user body basicAuth true "User data"
 // @Success 200 "User created"
 // @Failure 400 "Invalid request"
 // @Failure 500 "Internal server error"
 // @Router /api/auth/signup [post]
 func signup(context *gin.Context) {
+	var body basicAuth
 
-	var body model.Users
 	if context.BindJSON(&body) != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request"})
@@ -56,7 +61,7 @@ func signup(context *gin.Context) {
 		return
 	}
 
-	user := model.Users{
+	user := models.Users{
 		Username: body.Username,
 		Password: string(hash),
 		Email:    body.Email,
@@ -70,27 +75,25 @@ func signup(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{})
 }
 
-// swagger:operation POST /api/auth/login Auth PostLoginRequest
-// POST Login
 // @Summary Send username and password to login
 // @Description Send username and password to login to receive a token in a cookie
 // @Tags Auth
 // @Accept json
-// @Param user body models.Users true "User data"
+// @Param user body basicAuth true "User data"
 // @Success 200 "User authenticated"
 // @Failure 400 "User not found"
 // @Failure 400 "Invalid password"
 // @Failure 500 "Internal server error"
 // @Router /api/auth/login [post]
 func login(context *gin.Context) {
-	var body model.Users
+	var body basicAuth
 	if context.BindJSON(&body) != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request"})
 		return
 	}
 
-	var user model.Users
+	var user models.Users
 	var result *gorm.DB
 	if body.Username == nil {
 		result = initializers.DB.First(&user, "email = ?", body.Email)
@@ -125,8 +128,6 @@ func login(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{})
 }
 
-// swagger:operation GET /api/auth/authenticate Auth GetAuthenticateRequest
-// GET Authenticate
 // @Summary Validate user token
 // @Description Validate user token
 // @Tags Auth
@@ -134,9 +135,27 @@ func login(context *gin.Context) {
 // @Success 200 "User authenticated"
 // @Failure 401 "Unauthorized"
 // @Router /api/auth/authenticate [get]
+// @Security JWT
 func authenticate(context *gin.Context) {
 	user, _ := context.Get("user")
 	context.JSON(http.StatusOK, gin.H{
-		"user": user.(model.Users).Username,
+		"user": user.(models.Users).Username,
 	})
+}
+
+// @Summary Delete JWT token
+// @Description Modifies token value and sets expiry date to be immediate
+// @Tags Auth
+// @Success 200 "Token deleted successfully"
+// @Failure 400 "No token present in request"
+// @Router /api/auth/logout [delete]
+func logout(context *gin.Context) {
+	_, err := context.Cookie("token")
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Not logged in",
+		})
+	}
+	context.SetCookie("token", "deleted", 0, "", "", false, true)
+	context.JSON(http.StatusOK, gin.H{})
 }

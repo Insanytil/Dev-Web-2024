@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	model "local_eat/api/models"
+	"local_eat/api/models"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -36,8 +36,8 @@ func LoadEnv() {
 }
 
 func SyncDB() {
-	err := DB.AutoMigrate(&model.Users{}, &model.Producers{}, &model.Category{}, &model.Product{},
-		&model.Company{}, &model.CatalogDetails{}, &model.RelCompProd{})
+	err := DB.AutoMigrate(&models.Users{}, &models.Producers{}, &models.Category{}, &models.Product{},
+		&models.Company{}, &models.CatalogDetails{}, &models.RelCompProd{})
 	if err != nil {
 		log.Fatal(err)
 	}
