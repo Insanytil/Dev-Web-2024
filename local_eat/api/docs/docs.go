@@ -529,7 +529,7 @@ const docTemplate = `{
         "JWT": {
             "type": "apiKey",
             "name": "token",
-            "in": "header"
+            "in": "cookie"
         }
     }
 }`

@@ -34,7 +34,7 @@ func init() {
 // @BasePath /
 // @schemes http
 // @securitydefinitions.apikey  JWT
-// @in                          header
+// @in                          cookie
 // @name                        token
 func main() {
 	// CORS is enabled only in prod profile

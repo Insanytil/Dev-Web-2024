@@ -339,7 +339,7 @@ schemes:
 - http
 securityDefinitions:
   JWT:
-    in: header
+    in: cookie
     name: token
     type: apiKey
 swagger: "2.0"
