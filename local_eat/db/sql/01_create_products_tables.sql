@@ -13,6 +13,7 @@ create table products(
 	name varchar(30) not null,
 	cat char(4) not null,
 	description longtext null,
+	picture varchar(30) not null,
 	primary key (id),
 	foreign key (cat) references categories(id),
 	unique (name)

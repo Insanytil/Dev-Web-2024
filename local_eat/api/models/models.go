@@ -36,6 +36,7 @@ type Product struct {
 	CategoryID     string          `json:"cat" example:"CAT1" gorm:"type:char(4);not null"`
 	Category       *Category       `gorm:"foreignKey:CategoryID; references:ID"`
 	Description    *string         `json:"description,omitempty" example:"A powerful laptop with high-resolution display." gorm:"type:longtext;null"`
+	Picture        string          `json:"picture" example:"image.jpg" gorm:"type:varchar(30); not null"`
 	CatalogDetails *CatalogDetails `gorm:"foreignKey:ID; references:ProductId"`
 }
 type CatalogDetails struct {
