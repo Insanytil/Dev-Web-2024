@@ -1,97 +1,26 @@
 <app-nav></app-nav>
 
-<h2>Produits :</h2>
-<div class="row">
-    <div class="col s12">
-
-        <ul class="col s2">
-            <div class="card">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator" src="../../../assets/miel.jpeg">
+<ng-container *ngIf="{products: productsList$ | async, productsError: productsError$ | async} as vm">
+    <div *ngIf="!vm.productsError && vm.products as products; else loading" class="row">
+        <div *ngFor="let product of products" class="col s12">
+            <ul class="col s2">
+                <div class="card">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <img class="activator" [src]="'assets/' + product.picture">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">{{product.name}}</span>
+                        <p><a href="#">plus d'informations</a></p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">Producteurs</a>
+                    </div>
                 </div>
-                <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4">Miel</span>
-                    <p><a href="#">plus d'informations</a></p>
-                </div>
-                <div class="card-action">
-                    <a href="#">Producteurs</a>
-                </div>
-            </div>
-        </ul>
-
-        <ul class="col s2">
-            <div class="card">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator" src="../../../assets/poulet.jpg">
-                </div>
-                <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4">Poulet</span>
-                    <p><a href="#">plus d'informations</a></p>
-                </div>
-                <div class="card-action">
-                    <a href="#">Producteurs</a>
-                </div>
-            </div>
-        </ul>
-
-        <ul class="col s2">
-            <div class="card">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator" src="../../../assets/salade.jpg">
-                </div>
-                <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4">Salade</span>
-                    <p><a href="#">plus d'informations</a></p>
-                </div>
-                <div class="card-action">
-                    <a href="#">Producteurs</a>
-                </div>
-            </div>
-        </ul>
-
-        <ul class="col s2">
-            <div class="card">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator" src="../../../assets/cornichon.png">
-                </div>
-                <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4">cornichon</span>
-                    <p><a href="#">plus d'informations</a></p>
-                </div>
-                <div class="card-action">
-                    <a href="#">Producteurs</a>
-                </div>
-            </div>
-        </ul>
-
-        <ul class="col s2">
-            <div class="card">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator" src="../../../assets/fromage_chevre.jpg">
-                </div>
-                <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4">Fromage de chèvre</span>
-                    <p><a href="#">plus d'informations</a></p>
-                </div>
-                <div class="card-action">
-                    <a href="#">Producteurs</a>
-                </div>
-            </div>
-        </ul>
-
-        <ul class="col s2">
-            <div class="card">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator" src="../../../assets/potiron.png">
-                </div>
-                <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4">Potiron</span>
-                    <p><a href="#">plus d'informations</a></p>
-                </div>
-                <div class="card-action">
-                    <a href="#">Producteurs</a>
-                </div>
-            </div>
-        </ul>
+            </ul>
+        </div>
     </div>
-</div>
+    <p *ngIf="vm.productsError as error">{{ error }}</p>
+    <ng-template #loading>
+        <div *ngIf="!vm.productsError" class="loader"></div>
+    </ng-template>
+</ng-container>
