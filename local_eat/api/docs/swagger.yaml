@@ -35,6 +35,23 @@ definitions:
       price:
         type: number
     type: object
+  models.Category:
+    properties:
+      description:
+        example: Ceci est une carrotte
+        type: string
+      id:
+        example: CAT1
+        type: string
+      mother_cat:
+        example: CAT2
+        type: string
+      motherCat:
+        $ref: '#/definitions/models.Category'
+      name:
+        example: Legume
+        type: string
+    type: object
   models.Company:
     properties:
       CompanyName:
@@ -79,6 +96,28 @@ definitions:
         $ref: '#/definitions/models.RelCompProd'
       username:
         example: john_vleminckx
+        type: string
+    type: object
+  models.Product:
+    properties:
+      cat:
+        example: CAT1
+        type: string
+      catalogDetails:
+        $ref: '#/definitions/models.CatalogDetails'
+      category:
+        $ref: '#/definitions/models.Category'
+      description:
+        example: A powerful laptop with high-resolution display.
+        type: string
+      id:
+        example: PROD1
+        type: string
+      name:
+        example: Laptop
+        type: string
+      picture:
+        example: image.jpg
         type: string
     type: object
   models.RelCompProd:
@@ -231,6 +270,25 @@ paths:
       summary: POST producers
       tags:
       - Producers
+  /api/products:
+    get:
+      description: Get products id, name, picture, category and description
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+        "404":
+          description: Not found
+        "500":
+          description: Internal server error
+      summary: Get products
+      tags:
+      - Products
   /api/users:
     get:
       description: Get the user info of the logged in user

@@ -26,8 +26,8 @@ func Routes(route *gin.Engine) {
 // @Failure 500 "Internal server error"
 // @Router /api/products [get]
 func GetProducts(context *gin.Context) {
-	var products *models.Product
-	result := initializers.DB.First(&products)
+	var products []models.Product
+	result := initializers.DB.Find(&products)
 	if result.Error == gorm.ErrRecordNotFound {
 		context.JSON(http.StatusNotFound, gin.H{})
 		return

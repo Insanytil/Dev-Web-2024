@@ -193,6 +193,35 @@
                 }
             }
         },
+        "/api/products": {
+            "get": {
+                "description": "Get products id, name, picture, category and description",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Product"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/users": {
             "get": {
                 "security": [
@@ -414,6 +443,30 @@
                 }
             }
         },
+        "models.Category": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "Ceci est une carrotte"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "CAT1"
+                },
+                "motherCat": {
+                    "$ref": "#/definitions/models.Category"
+                },
+                "mother_cat": {
+                    "type": "string",
+                    "example": "CAT2"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Legume"
+                }
+            }
+        },
         "models.Company": {
             "type": "object",
             "properties": {
@@ -478,6 +531,37 @@
                 "username": {
                     "type": "string",
                     "example": "john_vleminckx"
+                }
+            }
+        },
+        "models.Product": {
+            "type": "object",
+            "properties": {
+                "cat": {
+                    "type": "string",
+                    "example": "CAT1"
+                },
+                "catalogDetails": {
+                    "$ref": "#/definitions/models.CatalogDetails"
+                },
+                "category": {
+                    "$ref": "#/definitions/models.Category"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "A powerful laptop with high-resolution display."
+                },
+                "id": {
+                    "type": "string",
+                    "example": "PROD1"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Laptop"
+                },
+                "picture": {
+                    "type": "string",
+                    "example": "image.jpg"
                 }
             }
         },

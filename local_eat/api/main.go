@@ -52,13 +52,16 @@ func main() {
 			AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Cache-Control", "X-Requested-With", "Set-Cookie"},
 			AllowCredentials: true,
 		}))
+		log.Println("Starting in dev mode")
 	} else if os.Getenv("profile") == "prod" {
+		gin.SetMode(gin.ReleaseMode)
 		router.Use(cors.New(cors.Config{
 			AllowOrigins:     []string{"https://localeat.ephec-ti.be"},
 			AllowMethods:     []string{"GET", "POST", "DELETE"},
 			AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Accept", "Cache-Control", "X-Requested-With", "Set-Cookie"},
 			AllowCredentials: true,
 		}))
+		log.Println("Starting in prod mode")
 	}
 	users.Routes(router)
 	auth.Routes(router)
