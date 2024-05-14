@@ -1,5 +1,11 @@
 # my-app
 
+website Local-Eat : [Local-Eat](https://www.localeat.ephec-ti.be/)  
+
+Il est possible de se créer un compte Utilisateur, dans l'améliorer en compte producteur et, en tant que producteur créer et se connecter à une compagnie. 
+
+Si connecté à une compagnie le producteur pourra ajouter des produits au catalogue de cette compagnie.
+
 ## Environment setup
 
 You need to have [Go](https://golang.org/),
