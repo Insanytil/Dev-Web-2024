@@ -31,24 +31,14 @@ func ConnectBD() {
 func LoadEnv() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Println("Error loading .env file")
+		log.Println("No .env file found")
 	}
 }
 
 func SyncDB() {
-	err := DB.AutoMigrate(&models.Users{}, &models.Producers{}, &models.Category{}, &models.Product{},
+	err := DB.AutoMigrate(&models.Images{}, &models.Users{}, &models.Producers{}, &models.Category{}, &models.Product{},
 		&models.Company{}, &models.CatalogDetails{}, &models.RelCompProd{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Définir les contraintes de clé étrangère supplémentaires si nécessaire
-	// Par exemple, pour MySQL, vous pouvez utiliser DB.Exec() pour exécuter des requêtes SQL
-	// pour définir les contraintes de clé étrangère.
-	// Voici un exemple de requête SQL pour définir une contrainte de clé étrangère dans MySQL :
-	// _, err = DB.Exec("ALTER TABLE producers ADD CONSTRAINT fk_users FOREIGN KEY (username) REFERENCES users(username) ON UPDATE CASCADE ON DELETE SET NULL;")
-	// if err != nil {
-	//     log.Fatal(err)
-	// }
-
-	// Répétez ce processus pour chaque clé étrangère que vous souhaitez définir.
 }

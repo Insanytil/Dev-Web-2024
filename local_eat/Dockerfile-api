@@ -1,8 +1,8 @@
-FROM golang:1.22.0-alpine3.18 AS builder
+FROM golang:1.22.3 AS builder
 WORKDIR /app
 COPY ./api .
 RUN go build -o api
 
-FROM golang:1.22.0-alpine3.18
+FROM golang:1.22.3
 COPY --from=builder /app/api /
 CMD ["/api"]

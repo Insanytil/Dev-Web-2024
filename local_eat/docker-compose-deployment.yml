@@ -60,7 +60,6 @@ services:
     networks:
       - db
     volumes:
-      - ./db/sql:/docker-entrypoint-initdb.d/
       - ./db/conf:/etc/mysql/conf.d
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]

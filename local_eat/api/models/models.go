@@ -5,15 +5,15 @@ import (
 )
 
 type Users struct {
-	Username         *string    `json:"username,omitempty" example:"john_vleminckx" gorm:"primaryKey; varchar(20); unique"`
-	Producer         *Producers `gorm:"foreignKey:Username; references:Username; constraint:OnDelete:CASCADE;"`
+	Username         *string    `json:"username,omitempty" example:"john_vleminckx" gorm:"primaryKey; type:varchar(20); unique"`
+	Producer         Producers `gorm:"foreignKey:Username; references:Username; constraint:OnDelete:CASCADE;"`
 	Password         string     `json:"password" example:"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"`
 	Email            *string    `json:"email,omitempty" example:"mateo@example.com" gorm:"type:varchar(50)"`
 	CreatedAt        time.Time  `json:"createdAt" example:"Mon Jan 2 15:04:05 MST 2006"`
-	ProfilePictureId *string    `json:"profilePictureId,omitempty" example:"1524689" gorm:"default:profil_unknown"`
+	ProfilePictureId *string    `json:"profilePictureId,omitempty" example:"1524689" gorm:"default:unknown; type:char(7); constraint:OnUpdate:CASCADE;"`
 }
 type Producers struct {
-	ID          int          `json:"id" example:"1" gorm:"primaryKey; autoIncrement; type:int; not null"`
+	ID          string       `json:"id" example:"1" gorm:"primaryKey; type:char(7); not null"`
 	Username    string       `json:"username" example:"john_vleminckx" gorm:"not null; index"`
 	Firstname   string       `json:"firstname" example:"John" gorm:"type:char(20); not null"`
 	Lastname    string       `json:"lastname" example:"Vleminckx" gorm:"type:char(20); not null"`
@@ -63,6 +63,13 @@ type Company struct {
 }
 
 type RelCompProd struct {
-	ProducerID  int    `json:"id" example:"1" gorm:"primaryKey; type:int; not null; index"`
+	ProducerID  string `json:"id" example:"1" gorm:"primaryKey; type:char(7); not null; index"`
 	CompanyName string `json:"CompanyName" gorm:"primaryKey; index"`
+}
+
+type Images struct {
+	ID string `gorm:"primaryKey; type:char(7);"`
+	Path string `gorm:"unique; not null"`
+	Description *string
+	Users *Users `gorm:"foreignKey: ProfilePictureId; references: ID;"`
 }

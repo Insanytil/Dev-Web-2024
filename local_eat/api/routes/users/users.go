@@ -20,7 +20,7 @@ func Routes(route *gin.Engine) {
 		users.GET("get-producer", middleware.AuthMiddleware, GetProducer)
 		users.POST("/create-company", middleware.AuthMiddleware, CreateCompany)
 		users.POST("/join-company", middleware.AuthMiddleware, JoinCompany)
-		users.DELETE("/quit-company", middleware.AuthMiddleware, QuitCompany)
+		users.POST("/quit-company", middleware.AuthMiddleware, QuitCompany)
 	}
 }
 
@@ -242,7 +242,7 @@ func JoinCompany(context *gin.Context) {
 // @Success 200 "Company quited successfully"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
-// @Router /api/users/quit-company [delete]
+// @Router /api/users/quit-company [post]
 // @Security JWT
 func QuitCompany(context *gin.Context) {
 	type RequestBody struct {
