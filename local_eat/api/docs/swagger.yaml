@@ -1,4 +1,4 @@
-basePath: /
+basePath: /api
 definitions:
   auth.basicAuth:
     properties:
@@ -84,8 +84,8 @@ definitions:
         example: John
         type: string
       id:
-        example: 1
-        type: integer
+        example: "1"
+        type: string
       lastname:
         example: Vleminckx
         type: string
@@ -125,8 +125,8 @@ definitions:
       CompanyName:
         type: string
       id:
-        example: 1
-        type: integer
+        example: "1"
+        type: string
     type: object
   models.Users:
     properties:
@@ -148,14 +148,13 @@ definitions:
         example: john_vleminckx
         type: string
     type: object
-host: localhost:8080
 info:
   contact: {}
   description: This is a sample server local eat API server.
   title: local eat API
   version: "1.0"
 paths:
-  /api/auth/authenticate:
+  /auth/authenticate:
     get:
       description: Validate user token
       produces:
@@ -170,7 +169,7 @@ paths:
       summary: Validate user token
       tags:
       - Auth
-  /api/auth/login:
+  /auth/login:
     post:
       consumes:
       - application/json
@@ -192,7 +191,7 @@ paths:
       summary: Send username and password to login
       tags:
       - Auth
-  /api/auth/logout:
+  /auth/logout:
     delete:
       description: Modifies token value and sets expiry date to be immediate
       responses:
@@ -203,7 +202,7 @@ paths:
       summary: Delete JWT token
       tags:
       - Auth
-  /api/auth/signup:
+  /auth/signup:
     post:
       consumes:
       - application/json
@@ -225,7 +224,7 @@ paths:
       summary: Send user data to create a new user
       tags:
       - Auth
-  /api/producers:
+  /producers:
     get:
       description: Get producers id, name, picture and created values
       produces:
@@ -244,7 +243,7 @@ paths:
       summary: Get producers
       tags:
       - Producers
-  /api/producers/register:
+  /producers/register:
     post:
       consumes:
       - application/json
@@ -270,7 +269,7 @@ paths:
       summary: POST producers
       tags:
       - Producers
-  /api/products:
+  /products:
     get:
       description: Get products id, name, picture, category and description
       produces:
@@ -289,7 +288,7 @@ paths:
       summary: Get products
       tags:
       - Products
-  /api/users:
+  /users:
     get:
       description: Get the user info of the logged in user
       produces:
@@ -308,7 +307,7 @@ paths:
       summary: Get users
       tags:
       - Users
-  /api/users/create-company:
+  /users/create-company:
     post:
       description: Create a new company with the necessary info
       responses:
@@ -323,7 +322,7 @@ paths:
       summary: Create companies
       tags:
       - Company
-  /api/users/get-company:
+  /users/get-company:
     get:
       description: Get the companies info of the logged in user
       produces:
@@ -342,7 +341,7 @@ paths:
       summary: Get companies
       tags:
       - Company
-  /api/users/get-producer:
+  /users/get-producer:
     get:
       description: Get the producer info of the logged in user
       produces:
@@ -361,7 +360,7 @@ paths:
       summary: Get producers
       tags:
       - Producer
-  /api/users/join-company:
+  /users/join-company:
     post:
       description: Join a producer to the selected company
       responses:
@@ -377,8 +376,8 @@ paths:
       tags:
       - Producer
       - Company
-  /api/users/quit-company:
-    delete:
+  /users/quit-company:
+    post:
       description: Unlink a the selected company with the logged in producer
       responses:
         "200":

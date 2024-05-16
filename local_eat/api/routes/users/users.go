@@ -31,7 +31,7 @@ func Routes(route *gin.Engine) {
 // @Success 200 {object} models.Users
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
-// @Router /api/users [get]
+// @Router /users [get]
 // @Security JWT
 func GetUsers(context *gin.Context) {
 	user, _ := context.Get("user")
@@ -57,7 +57,7 @@ func GetUsers(context *gin.Context) {
 // @Success 200 {object} models.Producers
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
-// @Router /api/users/get-producer [get]
+// @Router /users/get-producer [get]
 // @Security JWT
 func GetProducer(context *gin.Context) {
 	user, _ := context.Get("user")
@@ -82,7 +82,7 @@ func GetProducer(context *gin.Context) {
 // @Success 200 {object} models.Company
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
-// @Router /api/users/get-company [get]
+// @Router /users/get-company [get]
 // @Security JWT
 func GetCompany(context *gin.Context) {
 	user, _ := context.Get("user")
@@ -119,7 +119,7 @@ func GetCompany(context *gin.Context) {
 // @Success 201 "Company created"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
-// @Router /api/users/create-company [post]
+// @Router /users/create-company [post]
 // @Security JWT
 func CreateCompany(context *gin.Context) {
 	user, _ := context.Get("user")
@@ -185,7 +185,7 @@ func CreateCompany(context *gin.Context) {
 // @Success 200 "Company joined successfully"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
-// @Router /api/users/join-company [post]
+// @Router /users/join-company [post]
 // @Security JWT
 func JoinCompany(context *gin.Context) {
 	var body models.Company
@@ -242,7 +242,7 @@ func JoinCompany(context *gin.Context) {
 // @Success 200 "Company quited successfully"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
-// @Router /api/users/quit-company [post]
+// @Router /users/quit-company [post]
 // @Security JWT
 func QuitCompany(context *gin.Context) {
 	type RequestBody struct {

@@ -39,7 +39,7 @@ func Routes(route *gin.Engine) {
 // @Success 200 "User created"
 // @Failure 400 "Invalid request"
 // @Failure 500 "Internal server error"
-// @Router /api/auth/signup [post]
+// @Router /auth/signup [post]
 func signup(context *gin.Context) {
 	var body basicAuth
 
@@ -84,7 +84,7 @@ func signup(context *gin.Context) {
 // @Failure 400 "User not found"
 // @Failure 400 "Invalid password"
 // @Failure 500 "Internal server error"
-// @Router /api/auth/login [post]
+// @Router /auth/login [post]
 func login(context *gin.Context) {
 	var body basicAuth
 	if context.BindJSON(&body) != nil {
@@ -134,7 +134,7 @@ func login(context *gin.Context) {
 // @Produce json
 // @Success 200 "User authenticated"
 // @Failure 401 "Unauthorized"
-// @Router /api/auth/authenticate [get]
+// @Router /auth/authenticate [get]
 // @Security JWT
 func authenticate(context *gin.Context) {
 	user, _ := context.Get("user")
@@ -148,7 +148,7 @@ func authenticate(context *gin.Context) {
 // @Tags Auth
 // @Success 200 "Token deleted successfully"
 // @Failure 400 "No token present in request"
-// @Router /api/auth/logout [delete]
+// @Router /auth/logout [delete]
 func logout(context *gin.Context) {
 	_, err := context.Cookie("token")
 	if err != nil {

@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/auth/authenticate": {
+        "/auth/authenticate": {
             "get": {
                 "security": [
                     {
@@ -40,7 +40,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/auth/login": {
+        "/auth/login": {
             "post": {
                 "description": "Send username and password to login to receive a token in a cookie",
                 "consumes": [
@@ -74,7 +74,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/auth/logout": {
+        "/auth/logout": {
             "delete": {
                 "description": "Modifies token value and sets expiry date to be immediate",
                 "tags": [
@@ -91,7 +91,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/auth/signup": {
+        "/auth/signup": {
             "post": {
                 "description": "Send user data to create a new user",
                 "consumes": [
@@ -125,7 +125,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/producers": {
+        "/producers": {
             "get": {
                 "description": "Get producers id, name, picture and created values",
                 "produces": [
@@ -154,7 +154,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/producers/register": {
+        "/producers/register": {
             "post": {
                 "security": [
                     {
@@ -196,7 +196,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/products": {
+        "/products": {
             "get": {
                 "description": "Get products id, name, picture, category and description",
                 "produces": [
@@ -225,7 +225,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/users": {
+        "/users": {
             "get": {
                 "security": [
                     {
@@ -256,7 +256,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/users/create-company": {
+        "/users/create-company": {
             "post": {
                 "security": [
                     {
@@ -281,7 +281,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/users/get-company": {
+        "/users/get-company": {
             "get": {
                 "security": [
                     {
@@ -312,7 +312,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/users/get-producer": {
+        "/users/get-producer": {
             "get": {
                 "security": [
                     {
@@ -343,7 +343,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/users/join-company": {
+        "/users/join-company": {
             "post": {
                 "security": [
                     {
@@ -369,8 +369,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/users/quit-company": {
-            "delete": {
+        "/users/quit-company": {
+            "post": {
                 "security": [
                     {
                         "JWT": []
@@ -517,8 +517,8 @@ const docTemplate = `{
                     "example": "John"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "string",
+                    "example": "1"
                 },
                 "lastname": {
                     "type": "string",
@@ -575,8 +575,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "string",
+                    "example": "1"
                 }
             }
         },
@@ -621,8 +621,8 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
-	BasePath:         "/",
+	Host:             "",
+	BasePath:         "/api",
 	Schemes:          []string{"http"},
 	Title:            "local eat API",
 	Description:      "This is a sample server local eat API server.",

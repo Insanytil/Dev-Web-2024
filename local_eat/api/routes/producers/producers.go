@@ -26,7 +26,7 @@ func Routes(route *gin.Engine) {
 // @Success 200 {array} models.Producers
 // @Failure 404 "Not found"
 // @Failure 500 "Internal server error"
-// @Router /api/producers [get]
+// @Router /producers [get]
 func GetProducers(context *gin.Context) {
 	var producers []*models.Producers
 	result := initializers.DB.Find(&producers)
@@ -52,7 +52,7 @@ func GetProducers(context *gin.Context) {
 // @Success 201 "Producteur created"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
-// @Router /api/producers/register [post]
+// @Router /producers/register [post]
 func RegisterProducers(context *gin.Context) {
 	// Récupérer le nom d'utilisateur du contexte
 	user, _ := context.Get("user")

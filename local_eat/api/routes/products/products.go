@@ -24,7 +24,7 @@ func Routes(route *gin.Engine) {
 // @Success 200 {array} models.Product
 // @Failure 404 "Not found"
 // @Failure 500 "Internal server error"
-// @Router /api/products [get]
+// @Router /products [get]
 func GetProducts(context *gin.Context) {
 	var products []models.Product
 	result := initializers.DB.Find(&products)

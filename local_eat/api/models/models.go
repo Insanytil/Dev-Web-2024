@@ -10,7 +10,7 @@ type Users struct {
 	Password         string     `json:"password" example:"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"`
 	Email            *string    `json:"email,omitempty" example:"mateo@example.com" gorm:"type:varchar(50)"`
 	CreatedAt        time.Time  `json:"createdAt" example:"Mon Jan 2 15:04:05 MST 2006"`
-	ProfilePictureId *string    `json:"profilePictureId,omitempty" example:"1524689" gorm:"default:unknown; type:char(7); constraint:OnUpdate:CASCADE;"`
+	ProfilePictureId *string    `json:"profilePictureId,omitempty" example:"1524689" gorm:"type:char(7); constraint:OnUpdate:CASCADE;"`
 }
 type Producers struct {
 	ID          string       `json:"id" example:"1" gorm:"primaryKey; type:char(7); not null"`

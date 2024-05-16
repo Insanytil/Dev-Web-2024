@@ -32,8 +32,7 @@ func init() {
 // @title local eat API
 // @version 1.0
 // @description This is a sample server local eat API server.
-// @host localhost:8080
-// @BasePath /
+// @BasePath /api
 // @schemes http
 // @securitydefinitions.apikey  JWT
 // @in                          cookie
@@ -68,14 +67,14 @@ func main() {
 	producers.Routes(router)
 	products.Routes(router)
 	upload.Routes(router)
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // The url pointing to API definition
-	log.Println("Web server is available on port 8080")
+	router.GET("api/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // The url pointing to API definition
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
 
+	log.Println("Web server is available on port 8080")
 	// Wait for interrupt signal to gracefully shutdown the server with
 	// a timeout of 5 seconds.
 	quit := make(chan os.Signal, 1) // Add buffer size of 1

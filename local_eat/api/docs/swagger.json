@@ -9,10 +9,9 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:8080",
-    "basePath": "/",
+    "basePath": "/api",
     "paths": {
-        "/api/auth/authenticate": {
+        "/auth/authenticate": {
             "get": {
                 "security": [
                     {
@@ -37,7 +36,7 @@
                 }
             }
         },
-        "/api/auth/login": {
+        "/auth/login": {
             "post": {
                 "description": "Send username and password to login to receive a token in a cookie",
                 "consumes": [
@@ -71,7 +70,7 @@
                 }
             }
         },
-        "/api/auth/logout": {
+        "/auth/logout": {
             "delete": {
                 "description": "Modifies token value and sets expiry date to be immediate",
                 "tags": [
@@ -88,7 +87,7 @@
                 }
             }
         },
-        "/api/auth/signup": {
+        "/auth/signup": {
             "post": {
                 "description": "Send user data to create a new user",
                 "consumes": [
@@ -122,7 +121,7 @@
                 }
             }
         },
-        "/api/producers": {
+        "/producers": {
             "get": {
                 "description": "Get producers id, name, picture and created values",
                 "produces": [
@@ -151,7 +150,7 @@
                 }
             }
         },
-        "/api/producers/register": {
+        "/producers/register": {
             "post": {
                 "security": [
                     {
@@ -193,7 +192,7 @@
                 }
             }
         },
-        "/api/products": {
+        "/products": {
             "get": {
                 "description": "Get products id, name, picture, category and description",
                 "produces": [
@@ -222,7 +221,7 @@
                 }
             }
         },
-        "/api/users": {
+        "/users": {
             "get": {
                 "security": [
                     {
@@ -253,7 +252,7 @@
                 }
             }
         },
-        "/api/users/create-company": {
+        "/users/create-company": {
             "post": {
                 "security": [
                     {
@@ -278,7 +277,7 @@
                 }
             }
         },
-        "/api/users/get-company": {
+        "/users/get-company": {
             "get": {
                 "security": [
                     {
@@ -309,7 +308,7 @@
                 }
             }
         },
-        "/api/users/get-producer": {
+        "/users/get-producer": {
             "get": {
                 "security": [
                     {
@@ -340,7 +339,7 @@
                 }
             }
         },
-        "/api/users/join-company": {
+        "/users/join-company": {
             "post": {
                 "security": [
                     {
@@ -366,8 +365,8 @@
                 }
             }
         },
-        "/api/users/quit-company": {
-            "delete": {
+        "/users/quit-company": {
+            "post": {
                 "security": [
                     {
                         "JWT": []
@@ -514,8 +513,8 @@
                     "example": "John"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "string",
+                    "example": "1"
                 },
                 "lastname": {
                     "type": "string",
@@ -572,8 +571,8 @@
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "string",
+                    "example": "1"
                 }
             }
         },
