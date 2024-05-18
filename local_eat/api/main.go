@@ -29,21 +29,9 @@ func init() {
 	initializers.SyncDB()
 }
 
-// @title local eat API
-// @version 1.0
-// @description This is a sample server local eat API server.
-// @BasePath /api
-// @schemes http
-// @securitydefinitions.apikey  JWT
-// @in                          cookie
-// @name                        token
-func main() {
+func setupRouter() *gin.Engine {
 	// CORS is enabled only in prod profile
 	router := gin.Default()
-	server := &http.Server{
-		Addr:    ":8080",
-		Handler: router,
-	}
 	if os.Getenv("profile") != "prod" {
 		router.Use(cors.New(cors.Config{
 			AllowOrigins:     []string{"http://localhost:3000", "https://localeat.ephec-ti.be"}, // Spécifiez votre origine Angular
@@ -67,7 +55,28 @@ func main() {
 	producers.Routes(router)
 	products.Routes(router)
 	upload.Routes(router)
-	router.GET("api/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // The url pointing to API definition
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // The url pointing to API definition
+	router.GET("/ping", func(context *gin.Context) {
+		context.String(200, "pong")
+	})
+	return router
+}
+
+// @title local eat API
+// @version 1.0
+// @description This is a sample server local eat API server.
+// @BasePath /api
+// @schemes http
+// @securitydefinitions.apikey  JWT
+// @in                          cookie
+// @name                        token
+func main() {
+	router := setupRouter()
+	server := &http.Server{
+		Addr:    ":8080",
+		Handler: router,
+	}
+	log.Println("Web server is available on port 8080")
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen: %s\n", err)
