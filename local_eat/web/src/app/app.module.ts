@@ -9,7 +9,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { NavComponent } from "./components/nav/nav.component";
 import { CatchphraseComponent } from './components/catchphrase/catchphrase.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomInterceptor } from './interceptors/custom-interceptor';
 import { RegisterProducersComponent } from './components/register-producers/register-producers.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -51,7 +51,8 @@ const routes: Routes = [
         BrowserModule,
         RouterModule.forRoot(routes),
         HttpClientModule,
-        FormsModule
+        FormsModule,
+        ReactiveFormsModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: CustomInterceptor, multi: true }
