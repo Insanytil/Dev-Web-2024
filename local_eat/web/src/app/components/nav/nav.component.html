@@ -1,4 +1,4 @@
-<nav >
+<nav>
     <div class="nav-wrapper green">
         <a href="/" class="brand-logo" style="margin-left: 10px; margin-top: 10px;"><img src="./assets/logo.png"></a>
 
@@ -18,19 +18,19 @@
             </li>
             <li *ngIf="isAuthenticated">
                 <a href="/profil">
-                  <img src="../../../assets/profil_unknown.jpg" alt="Image de profil" style="width:30px; height: 30px; border-radius: 50%;">
+                <img src="../../../assets/profil_unknown.jpg" alt="Image de profil" style="width:30px; height: 30px; border-radius: 50%;">
                 </a>
-              </li>
-              <li *ngIf="!isAuthenticated"><a routerLink="/login">Connexion</a></li>
-              <li *ngIf="!isAuthenticated"><a routerLink="/signup">Inscription</a></li>
+            </li>
+            <li *ngIf="!isAuthenticated"><a routerLink="/login">Connexion</a></li>
+            <li *ngIf="!isAuthenticated"><a routerLink="/signup">Inscription</a></li>
             
         </ul>
     </div>
 </nav>
 
-<div class="row" style="margin-bottom: 5%">
+<div class="row" style="margin-bottom: 5%;">
     <div class="col s12">
-        <ul class="tabs">
+        <ul class="tabs" style="overflow: hidden;">
             <li class="tab col s1"></li>
             <li class="tab col s2"><a href="producers">Producteurs</a></li>
             <li class="tab col s2"><a href="products">Produits</a></li>
