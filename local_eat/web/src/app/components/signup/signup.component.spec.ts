@@ -1,14 +1,46 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignupComponent } from './signup.component';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
   let fixture: ComponentFixture<SignupComponent>;
 
+  class AuthServiceStub {
+    LOGIN_USER_URL = '/login';
+    SIGNIN_USER_URL = '/signup';
+    
+    constructor() { }
+  
+    login(username: string, password: string): Observable<any> {
+      // Simulate a successful login response
+      const mockResponse = {
+        status: 200,
+        body: { message: 'User logged in successfully'}
+      };
+      return of(mockResponse);
+    }
+    
+    signup(email: string, password: string, username: string): Observable<any> {
+      // Simulate a successful signup response
+      const mockResponse = {
+        status: 201,
+        body: { message: 'User created successfully' }
+      };
+      return of(mockResponse);
+    }
+  }
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [SignupComponent],
+      imports: [ReactiveFormsModule],
+      providers: [{ provide: Router, useClass: Router}, { provide: AuthService, useClass: AuthServiceStub }]
     });
     fixture = TestBed.createComponent(SignupComponent);
     component = fixture.componentInstance;
@@ -92,8 +124,8 @@ describe('SignupComponent', () => {
 
   it('should call onSubmit method', () => {
     spyOn(component, 'signup');
-    let el = fixture.debugElement.query(By.css('button')).nativeElement;
-    el.click();
+    let form = fixture.debugElement.query(By.css('form')).nativeElement;
+    form.dispatchEvent(new Event('submit'));
     expect(component.signup).toHaveBeenCalledTimes(1);
   });
 });

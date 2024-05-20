@@ -9,7 +9,7 @@
                     <div class="input-field col s12">
                         <input placeholder="Nom d'utilisateur*" id="first_name" type="text" class="validate" [(ngModel)]="username" name="username" formControlName="usernameValid" required>
                         <label for="first_name" class="active">Nom d'utilisateur ou email *</label>
-                        <div class="form-error" *ngIf="loginForm.get('usernameValid')?.touched && !loginForm.get('usernameValid')?.valid">
+                        <div id="first_name_error" class="form-error" *ngIf="loginForm.get('usernameValid')?.touched && !loginForm.get('usernameValid')?.valid">
                             <div *ngIf="loginForm.get('usernameValid')?.errors?.['required']">Nom d'utilisateur requis</div>
                         </div>
                     </div>
@@ -18,7 +18,7 @@
                     <div class="input-field col s12">
                         <input placeholder="Mot de passe*" id="password" type="password" class="validate" [(ngModel)]="password" name="password" formControlName="passwordValid" required>
                         <label for="password" class="active">Mot de passe *</label>
-                        <div class="form-error" *ngIf="loginForm.get('passwordValid')?.touched && !loginForm.get('passwordValid')?.valid">
+                        <div id="password_error" class="form-error" *ngIf="loginForm.get('passwordValid')?.touched && !loginForm.get('passwordValid')?.valid">
                             <div *ngIf="loginForm.get('passwordValid')?.errors?.['required']">Mot de passe requis</div>
                             <div *ngIf="loginForm.get('passwordValid')?.errors?.['minlength']">Le mot de passe doit être de 8 charactères minimum</div>
                         </div>

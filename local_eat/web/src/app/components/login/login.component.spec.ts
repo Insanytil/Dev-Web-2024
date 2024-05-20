@@ -2,14 +2,36 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
+  class AuthServiceStub {
+    LOGIN_USER_URL = '/login';
+    
+    constructor() { }
+  
+    login(username: string, password: string): Observable<any> {
+      // Simulate a successful login response
+      const mockResponse = {
+        status: 200,
+        body: { message: 'User logged in successfully'}
+      };
+      return of(mockResponse);
+    }
+  }
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [LoginComponent]
+      declarations: [LoginComponent],
+      imports: [ReactiveFormsModule],
+      providers: [{ provide: Router, useClass: Router}, { provide: AuthService, useClass: AuthServiceStub }]
     });
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
@@ -58,8 +80,8 @@ describe('LoginComponent', () => {
 
   it('should call onSubmit method', () => {
     spyOn(component, 'login');
-    let el = fixture.debugElement.query(By.css('button')).nativeElement;
-    el.click();
+    let form = fixture.debugElement.query(By.css('form')).nativeElement;
+    form.dispatchEvent(new Event('submit'));
     expect(component.login).toHaveBeenCalledTimes(1);
   });
 });
