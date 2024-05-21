@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
 
@@ -15,10 +15,19 @@ export class AuthService {
   constructor(private http:HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
-    const userData = {
-      "username": username,
-      "password": password,
-    };
+    const emailRegEx = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+    let userData;
+    if (emailRegEx.test(username)) {
+      userData = {
+        "email": username,
+        "password": password
+      };
+    } else {
+      userData = {
+        "username": username,
+        "password": password
+      };
+    }
 
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
