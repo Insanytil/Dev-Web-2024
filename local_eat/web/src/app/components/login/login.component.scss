@@ -1,3 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+* {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    font-family: "Poppins", sans-serif !important;
+}
+
+.login-container {
+    height: 100vh !important;
+    width: 100% !important;
+    align-items: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    background-image: radial-gradient(
+        circle farthest-corner at 10% 20%,
+        rgba(253, 101, 133, 1) 0%,
+        rgba(255, 211, 165, 1) 90%
+    ) !important;
+}
+
+.login-card {
+    border-radius: 10px !important;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3) !important;
+    width: 400px !important;
+    height: 400px !important;
+    background-color: #ffffff !important;
+    padding: 10px 30px !important;
+    h1 {
+        font-size: 26px !important;
+        font-weight: bold !important;
+    }
+}
+
+.login-card_title {
+  text-align: center !important;
+  padding: 10px !important;
+}
+
+.login-form {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;  // Take remaining space in .login-card
+    gap: 20px ;  // Add gap between all children elements
+    justify-content: flex-end !important;
+    input {
+        margin: 10px 0 !important;
+        width: 100% !important;
+        background-color: #e2e2e2!important;
+        border: none !important;
+        outline: none !important;
+        padding: 12px 20px !important;
+        border-radius: 4px !important;
+    }
+    .button-holder {
+        margin-top: auto;
+        button {
+            background-color: #4796ff !important;
+            color: #ffffff !important;
+            font-size: 16px !important;
+            outline: none !important;
+            border-radius: 5px !important;
+            border: none !important;
+            padding: 8px 15px !important;
+            width: 100% !important;
+        }
+    }
+}
+
+.login-card {
+    a {
+        color: #4796ff !important;
+        text-decoration: none !important;
+    }
+}
+
 .form-error {
     color: #cc0033;
     display: inline-block;
