@@ -1,47 +1,42 @@
+<!-- products-management.component.html -->
 <hr>
-<h2 *ngIf="producer">Vos produits :</h2>
+<h2 *ngIf="producer">Ajouter un produit</h2>
 <div class="row" *ngIf="producer">
-  <div class="col s12 ">
-
-      <ul class="col s2">
-        <div class="card">
-          <a (click)="toggleAddProductForm()">
+  <div class="col s12">
+    <!-- Card for adding a new product -->
+    <div class="col s2">
+      <div class="card">
+        <a (click)="toggleAddProductForm()">
           <div class="card-image waves-effect waves-block waves-light" *ngIf="!showAddProductForm">
-              <img class="activator" src="../../../assets/add.png"> 
+            <img class="activator" src="../../../assets/add.png" alt="Add Product">
+          </div>
+        </a>
+        <div class="card-content" *ngIf="!showAddProductForm">
+          <span class="card-title activator grey-text text-darken-4">Ajouter un produit</span>
+        </div>
+        <div *ngIf="showAddProductForm" class="card-content white-text">
+          <span class="card-title grey-text text-darken-4">Ajouter un produit</span>
+          <form (ngSubmit)="addNewProduct(newProductForm)" #newProductForm="ngForm">
+            <div>
+              <label for="category">Catégorie</label>
+              <select id="category" name="category" [(ngModel)]="newProduct.categoryId" (change)="onCategoryChange($event)" required form="ngForm">
+                <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+              </select>
             </div>
-          </a>
-          <div class="card-content" *ngIf="!showAddProductForm">
-            <span class="card-title activator grey-text text-darken-4">
-              Ajouter un produit
-            </span>
-          </div>
-          <div *ngIf="showAddProductForm" class="card-content white-text">
-            <span class="card-title grey-text text-darken-4">Ajouter un produit</span>
-            <form (ngSubmit)="addNewProduct()">
-              <input type="text" name ="Nom" placeholder="Nom du produit">
-              <input type="text" name="Quantite" placeholder="Quantité">
-              <input type="text" name="Prix" placeholder="Prix">
-              <app-file-upload></app-file-upload>
-              <br><br><br><br><br><br><br>
-              <button type="submit">Ajouter</button>
-              <button type="button" (click)="toggleAddProductForm()">Annuler</button>
+            <div>
+              <label for="product">Produit</label>
+              <select id="product" name="product" [(ngModel)]="newProduct.name" required >
+                <option *ngFor="let product of products" [value]="product.name">{{ product.name }}</option>
+              </select>
+            </div>
+            <input type="number" name="quantity" ngModel placeholder="Quantité" required>
+            <input type="number" name="price" ngModel placeholder="Prix" required>
+            <app-file-upload></app-file-upload>
+            <button type="submit" [disabled]="newProductForm.invalid">Ajouter</button>
+            <button type="button" (click)="toggleAddProductForm()">Annuler</button>
           </form>
-          </div>
         </div>
-      </ul>
-      <ul class="col s2">
-        <div class="card">
-          <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" >
-          </div>
-          <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4"></span>
-            <p><a href="#">plus d'informations</a></p>
-          </div>
-          <div class="card-action">
-            <a href="#">Producteurs</a>
-          </div>
-        </div>
-      </ul>
+      </div>
+    </div>
   </div>
 </div>
