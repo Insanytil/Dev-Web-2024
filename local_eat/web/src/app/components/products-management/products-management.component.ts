@@ -4,6 +4,7 @@ import { ProfileService } from 'src/app/services/profile.service';
 import { Producer } from 'src/app/models/producer.model';
 import { ProductsService } from 'src/app/services/products.service';
 
+
 @Component({
   selector: 'app-products-management',
   templateUrl: './products-management.component.html',
@@ -15,7 +16,9 @@ export class ProductsManagementComponent implements OnInit {
   categories: any[] = [];
   products: any[] = [];
   selectedCategoryId: string = '';
+  selectedProductImage: string = '';
   newProduct: any = {
+    id: '',
     name: '',
     categoryId: '',
     quantity: 0,
@@ -36,12 +39,20 @@ export class ProductsManagementComponent implements OnInit {
     
   }
   onCategoryChange(event: any): void {
-    const categoryId = event.target.value;
+    const categoryId = event.value;
     console.log('Selected Category ID:', categoryId); // Log selected category ID
     this.productsService.getProductsByCategory(categoryId).subscribe(data => {
       this.products = data;
       console.log('Products:', this.products); // Verify products are fetched
     });
+  }
+  onProductChange(event: any): void {
+    const productName = event.value;
+    const selectedProduct = this.products.find(product => product.name === productName);
+    if (selectedProduct) {
+      this.selectedProductImage = selectedProduct.picture;
+    }
+    console.log(this.selectedProductImage)
   }
   
   getProducer(): void {

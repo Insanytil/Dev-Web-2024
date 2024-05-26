@@ -30,8 +30,8 @@
                             "src/styles"
 						],
 						"styles": [
-							
-						],
+              "@angular/material/prebuilt-themes/purple-green.css"
+            ],
 						"scripts": []
 					},
 					"configurations": {
@@ -99,7 +99,8 @@
                             "src/styles"
 						],
 						"styles": [
-						],
+              "@angular/material/prebuilt-themes/purple-green.css"
+            ],
 						"scripts": []
 					}
 				}

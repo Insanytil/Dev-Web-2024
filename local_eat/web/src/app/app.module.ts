@@ -17,6 +17,10 @@ import { ProductsComponent } from './components/products/products.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProductsManagementComponent } from './components/products-management/products-management.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -52,7 +56,11 @@ const routes: Routes = [
         RouterModule.forRoot(routes),
         HttpClientModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatInputModule,
+        BrowserAnimationsModule, 
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: CustomInterceptor, multi: true }

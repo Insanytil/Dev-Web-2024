@@ -19,16 +19,22 @@
           <form (ngSubmit)="addNewProduct(newProductForm)" #newProductForm="ngForm">
             <div>
               <label for="category">Catégorie</label>
-              <select id="category" name="category" [(ngModel)]="newProduct.categoryId" (change)="onCategoryChange($event)" required form="ngForm">
-                <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-              </select>
+              <mat-form-field appearance="fill">
+                <mat-select name="category" id="category" [(ngModel)]="newProduct.categoryId" (selectionChange)="onCategoryChange($event)" required style="color: black;">
+                  <mat-option value="" disabled selected >Select text</mat-option>
+                  <mat-option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
             <div>
               <label for="product">Produit</label>
-              <select id="product" name="product" [(ngModel)]="newProduct.name" required >
-                <option *ngFor="let product of products" [value]="product.name">{{ product.name }}</option>
-              </select>
+              <mat-form-field appearance="fill">
+                <mat-select id="product" name="product" [(ngModel)]="newProduct.id" (selectionChange)="onProductChange($event)" required style="color: black;">
+                  <mat-option *ngFor="let product of products" [value]="product.name">{{ product.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
+            <img [src]="selectedProductImage" alt="Product Image" style="width: 100px; height: 100px;">
             <input type="number" name="quantity" ngModel placeholder="Quantité" required>
             <input type="number" name="price" ngModel placeholder="Prix" required>
             <app-file-upload></app-file-upload>
