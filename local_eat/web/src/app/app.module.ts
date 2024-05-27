@@ -24,7 +24,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', component: DashboardComponent },
+    { path: 'home', component: ProductsComponent },
     { path: 'producers', component: ProducersComponent },
     { path: 'products', component: ProductsComponent },
     { path: 'login', component: LoginComponent },

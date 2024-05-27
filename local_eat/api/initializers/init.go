@@ -99,7 +99,7 @@ func initializeProducts(DB *gorm.DB) {
 		{ID: "PROD20", Name: "Filet de saumon", CategoryID: "CAT4", Description: stringPtr("Un filet de saumon."), Picture: "salmon_fillet.jpg"},
 		{ID: "PROD21", Name: "Thon", CategoryID: "CAT4", Description: stringPtr("Steak de thon frais."), Picture: "tuna.jpg"},
 		{ID: "PROD22", Name: "Crevettes", CategoryID: "CAT4", Description: stringPtr("Crevettes fraîches."), Picture: "shrimp.jpg"},
-		{ID: "PROD23", Name: "Lait", CategoryID: "CAT5", Description: stringPtr("Un carton de lait."), Picture: ".milk.jpg"},
+		{ID: "PROD23", Name: "Lait", CategoryID: "CAT5", Description: stringPtr("Un carton de lait."), Picture: "milk.jpg"},
 		{ID: "PROD24", Name: "Fromage", CategoryID: "CAT5", Description: stringPtr("Un bloc de fromage."), Picture: "cheese.jpg"},
 		{ID: "PROD25", Name: "Yaourt", CategoryID: "CAT5", Description: stringPtr("Un pot de yaourt."), Picture: "yogurt.jpg"},
 		{ID: "PROD26", Name: "Riz", CategoryID: "CAT6", Description: stringPtr("Un sac de riz."), Picture: "rice.jpg"},

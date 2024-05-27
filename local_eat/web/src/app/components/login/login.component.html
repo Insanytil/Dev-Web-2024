@@ -2,7 +2,7 @@
     <div class="login-card">
         <div class="login-card_title">
             <h1>Connectez-vous</h1>
-            <span>Vous n'avez pas encore un compte? <a href="/login">Inscrivez-vous</a></span>
+            <span>Vous n'avez pas encore un compte? <a href="/signup">Inscrivez-vous</a></span>
         </div>
         <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
             <input placeholder="Nom d'utilisateur*" id="first_name" type="text" class="validate" [(ngModel)]="username" name="username" formControlName="usernameValid" required>
