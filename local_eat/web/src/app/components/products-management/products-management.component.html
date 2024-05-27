@@ -16,11 +16,11 @@
         </div>
         <div *ngIf="showAddProductForm" class="card-content white-text">
           <span class="card-title grey-text text-darken-4">Ajouter un produit</span>
-          <form (ngSubmit)="addNewProduct(newProductForm)" #newProductForm="ngForm">
+          <form (ngSubmit)="addNewProduct()" #newProductForm="ngForm">
             <div>
               <label for="category">Catégorie</label>
               <mat-form-field appearance="fill">
-                <mat-select name="category" id="category" [(ngModel)]="newProduct.categoryId" (selectionChange)="onCategoryChange($event)" required style="color: black;">
+                <mat-select name="category" id="category" (selectionChange)="onCategoryChange($event)" required style="color: black;">
                   <mat-option value="" disabled selected >Select text</mat-option>
                   <mat-option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</mat-option>
                 </mat-select>
@@ -29,15 +29,13 @@
             <div>
               <label for="product">Produit</label>
               <mat-form-field appearance="fill">
-                <mat-select id="product" name="product" [(ngModel)]="newProduct.id" (selectionChange)="onProductChange($event)" required style="color: black;">
+                <mat-select id="product" name="product" [(ngModel)]="productId" (selectionChange)="onProductChange($event)" required style="color: black;">
                   <mat-option *ngFor="let product of products" [value]="product.name">{{ product.name }}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
-            <img [src]="selectedProductImage" alt="Product Image" style="width: 100px; height: 100px;">
-            <input type="number" name="quantity" ngModel placeholder="Quantité" required>
-            <input type="number" name="price" ngModel placeholder="Prix" required>
-            <app-file-upload></app-file-upload>
+            <input type="number" name="quantity" ngModel [(ngModel)]="quantity" placeholder="Quantité" required>
+            <input type="number" name="price" ngModel [(ngModel)]="price" placeholder="Prix" required>
             <button type="submit" [disabled]="newProductForm.invalid">Ajouter</button>
             <button type="button" (click)="toggleAddProductForm()">Annuler</button>
           </form>

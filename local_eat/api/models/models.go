@@ -13,7 +13,7 @@ type Users struct {
 	ProfilePictureId *string   `json:"profilePictureId,omitempty" example:"1524689" gorm:"type:char(7); constraint:OnUpdate:CASCADE;"`
 }
 type Producers struct {
-	ID          string       `json:"id" example:"1" gorm:"primaryKey; type:char(7); not null"`
+	ID          int          `json:"id" example:"1" gorm:"primaryKey; autoIncrement; not null"`
 	Username    string       `json:"username" example:"john_vleminckx" gorm:"not null; index"`
 	Firstname   string       `json:"firstname" example:"John" gorm:"type:char(20); not null"`
 	Lastname    string       `json:"lastname" example:"Vleminckx" gorm:"type:char(20); not null"`
@@ -60,7 +60,7 @@ type Company struct {
 }
 
 type RelCompProd struct {
-	ProducerID  string `json:"id" example:"1" gorm:"primaryKey; type:char(7); not null; index"`
+	ProducerID  int    `json:"id" example:"1" gorm:"primaryKey; not null; index"`
 	CompanyName string `json:"CompanyName" gorm:"primaryKey; index"`
 }
 

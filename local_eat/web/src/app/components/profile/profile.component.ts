@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit {
 
   public user: User | undefined;
   public company: Company | undefined;
+  public haveCompany: boolean = false;
   public producer: Producer | undefined;
   public showCreateCompanyForm: boolean = false;
   public showJoinCompanyForm: boolean = false;
@@ -58,17 +59,20 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
+
   getCompany(){
     this.profileService.getCompany().subscribe(
       (dataCompany) => {
         this.company = dataCompany;
-        console.log(dataCompany)
+        this.haveCompanyFunc(); // Call haveCompanyFunc here after getting the company data
+        console.log("compagnie" + this.company);
       },
       (error) => {
         console.error(error);
       }
     );
   }
+
   createCompany(){
     this.profileService.CreateCompany(this.CompanyName, this.Password, this.Alias, 
     this.Address, this.Mail, this.PhoneNum, this.VATNum, this.Description).subscribe(
@@ -80,22 +84,24 @@ export class ProfileComponent implements OnInit {
           window.alert("Erreur lors de la création de la compagnie");
         }
       }
-    )
+    );
   }
+
   joinCompany(){
     this.profileService.JoinCompany(this.CompanyName, this.Password).subscribe(
-        (res: HttpResponse<any>) => {
-          if (res.ok) {
-            window.location.reload();
-          } else {
-            window.location.reload();
-            window.alert("Erreur pour rejoindre la compagnie");
-          }
+      (res: HttpResponse<any>) => {
+        if (res.ok) {
+          window.location.reload();
+        } else {
+          window.location.reload();
+          window.alert("Erreur pour rejoindre la compagnie");
         }
-      )
+      }
+    );
   }
+
   quitCompany(){
-    console.log(this.producer?.id)
+    console.log(this.producer?.id);
     this.profileService.QuitCompany(this.producer?.id).subscribe(
       (res: HttpResponse<any>) => {
         if (res.ok) {
@@ -105,12 +111,20 @@ export class ProfileComponent implements OnInit {
           window.alert("Erreur pour quitter la compagnie");
         }
       }
-    )
+    );
   }
+
   toggleCreateCompanyForm() {
     this.showCreateCompanyForm = !this.showCreateCompanyForm;
   }
+
   toggleJoinCompanyForm() {
     this.showJoinCompanyForm = !this.showJoinCompanyForm;
+  }
+
+  haveCompanyFunc(){
+    console.log(this.company);
+    this.haveCompany = !!this.company;
+    console.log(this.haveCompany);
   }
 }

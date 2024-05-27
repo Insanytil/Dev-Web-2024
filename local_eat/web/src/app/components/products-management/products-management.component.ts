@@ -17,19 +17,14 @@ export class ProductsManagementComponent implements OnInit {
   products: any[] = [];
   selectedCategoryId: string = '';
   selectedProductImage: string = '';
-  newProduct: any = {
-    id: '',
-    name: '',
-    categoryId: '',
-    quantity: 0,
-    price: 0,
-    picture: ''
-  };
   constructor(
     private profileService: ProfileService, 
     private productsService: ProductsService, 
     private router: Router
   ) { }
+  productId: string = '';
+  quantity: number = 0;
+  price: number = 0;
 
   ngOnInit(): void {
     this.getProducer();
@@ -49,10 +44,10 @@ export class ProductsManagementComponent implements OnInit {
   onProductChange(event: any): void {
     const productName = event.value;
     const selectedProduct = this.products.find(product => product.name === productName);
+    this.productId = selectedProduct.id;
     if (selectedProduct) {
       this.selectedProductImage = selectedProduct.picture;
     }
-    console.log(this.selectedProductImage)
   }
   
   getProducer(): void {
@@ -70,8 +65,8 @@ export class ProductsManagementComponent implements OnInit {
     this.showAddProductForm = !this.showAddProductForm;
   }
 
-  addNewProduct(productData: any): void {
-    this.productsService.addProduct(productData).subscribe(
+  addNewProduct(): void {
+    this.productsService.addProduct(this.productId, this.quantity, this.price).subscribe(
       (dataProducer) => { 
         this.producer = dataProducer;
         this.toggleAddProductForm();
