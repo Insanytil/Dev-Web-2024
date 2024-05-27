@@ -15,7 +15,7 @@ export class ProductsManagementComponent implements OnInit {
   public showAddProductForm: boolean = false;
   categories: any[] = [];
   products: any[] = [];
-  newProducts: any[] = [];
+  productsCompany: any[] = [];
   selectedCategoryId: string = '';
   selectedProductId: string = '';
   constructor(
@@ -32,7 +32,12 @@ export class ProductsManagementComponent implements OnInit {
     this.productsService.getCategories().subscribe(data => {
       this.categories = data;
     });
-    
+    this.getProductsByCompany();
+  }
+  getProductsByCompany(): void {
+    this.productsService.getProductsByCompany().subscribe(data => {
+      this.productsCompany = data;
+    });
   }
   onCategoryChange(event: any): void {
     const categoryId = event.value;
@@ -65,12 +70,15 @@ export class ProductsManagementComponent implements OnInit {
     this.productsService.addProduct(this.productId, this.quantity, this.price).subscribe(
       (dataProducer) => { 
         this.producer = dataProducer;
-        this.newProducts.push(this.productId, this.quantity, this.price); 
         this.toggleAddProductForm();
+        this.getProductsByCompany();
       },
       (error) => {
         console.error('Error adding new product:', error);
       }
     );
+  }
+  getProductImageUrl(picture: string): string {
+    return "../../../assets/products/" + picture;
   }
 }

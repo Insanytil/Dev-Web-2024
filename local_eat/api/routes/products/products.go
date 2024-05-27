@@ -19,6 +19,7 @@ func Routes(route *gin.Engine) {
 		products.POST("add-product", middleware.AuthMiddleware, CreateProduct)
 		products.GET("categories", GetCategories)
 		products.GET("by-category", GetProductsByCategory) // New route
+		products.GET("products-by-company", middleware.AuthMiddleware, GetProductsByCompany)
 	}
 }
 
@@ -141,4 +142,52 @@ func CreateProduct(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusCreated, gin.H{"message": "Product created", "product": newCatalogDetails})
+}
+
+func GetProductsByCompany(context *gin.Context) {
+	user, _ := context.Get("user")
+	foundUser := user.(models.Users).Username
+	var producer models.Producers
+
+	result := initializers.DB.Where("username = ?", *foundUser).First(&producer)
+	if result.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving producer from database"})
+		return
+	}
+	if result.RowsAffected == 0 {
+		context.JSON(http.StatusNotFound, gin.H{"error": "Producer not found"})
+		return
+	}
+	var relCompProd models.RelCompProd
+	result2 := initializers.DB.Where("producer_id = ?", producer.ID).First(&relCompProd)
+	if result2.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving CompanyName from database"})
+		return
+	}
+	// Perform a join query to get the combined data
+	type ProductDetails struct {
+		Availability bool    `json:"availability"`
+		Quantity     int     `json:"quantity"`
+		Price        float64 `json:"price"`
+		Name         string  `json:"name"`
+		Description  string  `json:"description"`
+		Picture      string  `json:"picture"`
+	}
+
+	var productDetails []ProductDetails
+	query := `
+		SELECT cd.availability, cd.quantity, cd.price, p.name, p.description, p.picture
+		FROM catalog_details cd
+		JOIN products p ON cd.product_id = p.id
+		WHERE cd.company_name = ?
+	`
+
+	result3 := initializers.DB.Raw(query, relCompProd.CompanyName).Scan(&productDetails)
+	if result3.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving products from database"})
+		return
+	}
+
+	context.JSON(http.StatusOK, productDetails)
+
 }

@@ -11,6 +11,7 @@ export class ProductsService {
     private url: string = `${environment.apiUrl}/products`;
     GET_CATEGORY_URL = '/categories';
     POST_NEW_PRODUCT_URL = '/add-product'
+    GET_PRODUCT_COMPANY = '/products-by-company'
     constructor(private http: HttpClient) { }
 
     getProducts(): Observable<Product[]> {
@@ -35,5 +36,8 @@ export class ProductsService {
     
     getProductsByCategory(categoryId: string): Observable<any> {
         return this.http.get(this.url+`/by-category?categoryId=${categoryId}`);
+    }
+    getProductsByCompany(): Observable<any> {
+        return this.http.get(this.url+ this.GET_PRODUCT_COMPANY);
     }
 }

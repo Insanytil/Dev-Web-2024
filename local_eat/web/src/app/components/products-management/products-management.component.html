@@ -43,5 +43,16 @@
         </div>
       </div>
     </div>
+    <div class="col s2" *ngFor="let product of productsCompany">
+      <div class="card">
+        <div class="card-content">
+          <img src="{{ getProductImageUrl(product.picture)}} " alt="Add Product" style="width:310px; height: 310px; border-radius: 50%;">
+          <span class="card-title">{{ product.name }}</span>
+          <p>Description: {{ product.description }}</p>
+          <p>Quantité: {{ product.quantity }}</p>
+          <p>Prix: {{ product.price }} €</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
