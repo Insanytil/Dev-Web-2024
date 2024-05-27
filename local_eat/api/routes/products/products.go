@@ -100,13 +100,11 @@ func GetProducts(context *gin.Context) {
 // @Failure 500 "Internal server error"
 // @Router /products [post]
 func CreateProduct(context *gin.Context) {
-	// Retrieve the user from the context
 	user, _ := context.Get("user")
 	foundUser := user.(models.Users).Username
-
-	// Find the producer based on the username
 	var producer models.Producers
-	result := initializers.DB.Where("username = ?", foundUser).First(&producer)
+
+	result := initializers.DB.Where("username = ?", *foundUser).First(&producer)
 	if result.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving producer from database"})
 		return
@@ -115,35 +113,20 @@ func CreateProduct(context *gin.Context) {
 		context.JSON(http.StatusNotFound, gin.H{"error": "Producer not found"})
 		return
 	}
-
-	// Find the related company-producer relationship
 	var relCompProd models.RelCompProd
 	result2 := initializers.DB.Where("producer_id = ?", producer.ID).First(&relCompProd)
 	if result2.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving CompanyName from database"})
 		return
 	}
-
-	// Bind the product data from the request
-	var product models.Product
-	err := context.ShouldBindJSON(&product)
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
-		return
-	}
-
-	// Bind the catalog details data from the request
 	var body models.CatalogDetails
 	if err := context.ShouldBindJSON(&body); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	// Create the new product and catalog details
 	newCatalogDetails := models.CatalogDetails{
-		ID:           body.ID,
 		CompanyName:  relCompProd.CompanyName,
-		ProductId:    product.ID,
+		ProductId:    body.ProductId,
 		CreatedAt:    time.Now(),
 		Quantity:     body.Quantity,
 		Availability: body.Quantity > 0,
@@ -157,5 +140,5 @@ func CreateProduct(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusCreated, gin.H{})
+	context.JSON(http.StatusCreated, gin.H{"message": "Product created", "product": newCatalogDetails})
 }

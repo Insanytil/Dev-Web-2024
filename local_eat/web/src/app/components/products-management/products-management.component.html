@@ -1,6 +1,6 @@
 <!-- products-management.component.html -->
 <hr>
-<h2 *ngIf="producer">Ajouter un produit</h2>
+<h2 *ngIf="producer">Vos produit</h2>
 <div class="row" *ngIf="producer">
   <div class="col s12">
     <!-- Card for adding a new product -->
@@ -30,6 +30,7 @@
               <label for="product">Produit</label>
               <mat-form-field appearance="fill">
                 <mat-select id="product" name="product" [(ngModel)]="productId" (selectionChange)="onProductChange($event)" required style="color: black;">
+                  <mat-option value="" disabled selected >Select text</mat-option>
                   <mat-option *ngFor="let product of products" [value]="product.name">{{ product.name }}</mat-option>
                 </mat-select>
               </mat-form-field>

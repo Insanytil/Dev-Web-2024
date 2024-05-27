@@ -37,8 +37,8 @@ type Product struct {
 	Picture     string    `json:"picture" example:"image.jpg" gorm:"type:varchar(50); not null"`
 }
 type CatalogDetails struct {
-	ID           string    `json:"id" example:"1" gorm:"primaryKey"`
-	CompanyName  string    `json:"CompanyName" example:"CompanyTest" gorm:"unique"`
+	ID           int       `json:"id" example:"1" gorm:"primaryKey;autoIncrement;not null"`
+	CompanyName  string    `json:"CompanyName" example:"CompanyTest" gorm:"type:varchar(30);not null"`
 	ProductId    string    `json:"ProductId" example:"1" gorm:"unique"`
 	CreatedAt    time.Time `json:"createdAt" example:"Mon Jan 2 15:04:05 MST 2006"`
 	Quantity     int       `json:"Quantity" example:"10" gorm:"default:0"`
@@ -47,7 +47,7 @@ type CatalogDetails struct {
 }
 
 type Company struct {
-	CompanyName    string          `json:"CompanyName" gorm:"primaryKey"`
+	CompanyName    string          `json:"CompanyName" gorm:"primaryKey;type:varchar(30);not null;unique"`
 	Password       string          `gorm:"not null"`
 	Alias          string          `gorm:"not null;unique"`
 	Address        string          `gorm:"not null"`
@@ -61,7 +61,7 @@ type Company struct {
 
 type RelCompProd struct {
 	ProducerID  int    `json:"id" example:"1" gorm:"primaryKey; not null; index"`
-	CompanyName string `json:"CompanyName" gorm:"primaryKey; index"`
+	CompanyName string `json:"CompanyName" gorm:"primaryKey; index;type:varchar(30);not null"`
 }
 
 type Images struct {
